@@ -4,18 +4,18 @@ clc;
 Y = randn(100,2);
 W = [1 1; 1 -1; 2 1; 2 -1]';
 X = Y * W + 0.1 * randn(100,4);
-joint_number=1;
-g='medeiros-adeus2015-12-7-16-42-35';
-Dados1=leDados(g);
-g='medeiros-adeus2015-12-7-16-42-49';
-Dados2=leDados(g);
-g='medeiros-adeus2015-12-7-16-43-4';
-Dados3=leDados(g);
-g='rui-adeus2015-12-7-16-40-55';
-Dados4=leDados(g);
-g='rui-adeus2015-12-7-16-41-18';
-Dados5=leDados(g);
+joint_number=6;
 g='rui-adeus2015-12-7-16-42-2';
+Dados1=leDados(g);
+g='rui-adeus2015-12-7-16-41-18';
+Dados2=leDados(g);
+g='rui-adeus2015-12-7-16-41-18';
+Dados3=leDados(g);
+g='medeiros-adeus2015-12-7-16-43-4';
+Dados4=leDados(g);
+g='medeiros-adeus2015-12-7-16-43-4';
+Dados5=leDados(g);
+g='medeiros-adeus2015-12-7-16-43-4';
 Dados6=leDados(g);
 
 % XNorm = X;
@@ -114,12 +114,12 @@ grid on;
 
 pflag=0;
 
-[dtw_Dist,D,dtw_k,w,s1w,s2w]=dtw(Dados1(:,joint_number),Dados5(:,joint_number),pflag);
-[dtw_Dist,D,dtw_k,w,s3w,s4w]=dtw(Dados2(:,joint_number),Dados5(:,joint_number),pflag);
-[dtw_Dist,D,dtw_k,w,s5w,s6w]=dtw(Dados3(:,joint_number),Dados5(:,joint_number),pflag);
-[dtw_Dist,D,dtw_k,w,s7w,s8w]=dtw(Dados4(:,joint_number),Dados5(:,joint_number),pflag);
-[dtw_Dist,D,dtw_k,w,s9w,s10w]=dtw(Dados5(:,joint_number),Dados5(:,joint_number),pflag);
-[dtw_Dist,D,dtw_k,w,s11w,s12w]=dtw(Dados6(:,joint_number),Dados5(:,joint_number),pflag);
+[dtw_Dist,D,dtw_k,w,s1w,s2w]=dtw(Dados1(:,joint_number),Dados3(:,joint_number),pflag);
+[dtw_Dist,D,dtw_k,w,s3w,s4w]=dtw(Dados2(:,joint_number),Dados3(:,joint_number),pflag);
+[dtw_Dist,D,dtw_k,w,s5w,s6w]=dtw(Dados3(:,joint_number),Dados3(:,joint_number),pflag);
+[dtw_Dist,D,dtw_k,w,s7w,s8w]=dtw(Dados4(:,joint_number),Dados3(:,joint_number),pflag);
+[dtw_Dist,D,dtw_k,w,s9w,s10w]=dtw(Dados5(:,joint_number),Dados3(:,joint_number),pflag);
+[dtw_Dist,D,dtw_k,w,s11w,s12w]=dtw(Dados6(:,joint_number),Dados3(:,joint_number),pflag);
 
 
 
@@ -173,7 +173,7 @@ T_maior_amostra=n*100/10^3;
 t=0:100/10^3:T_maior_amostra-100/10^3;
 subplot(6,1,5)
 
-plot(t,s9w,'r-x')
+plot(t,s9w,'b-x')
 axis on;
 xlabel('Time');
 grid on;

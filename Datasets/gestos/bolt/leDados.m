@@ -1,10 +1,10 @@
 function [Dados] = leDados(nomeFich)
 
 fileID = fopen(nomeFich,'r');
-A=textscan(fileID, '%30f ','Delimiter',',');
+A=textscan(fileID, '%f %f %f %f %f %f %f %f %f %f %f %f ','Delimiter',',');
 
 fclose(fileID);
-A=A{1,1};
-Dados= reshape(A,[],12);
+Dados=cell2mat(A);
+
 end
 
