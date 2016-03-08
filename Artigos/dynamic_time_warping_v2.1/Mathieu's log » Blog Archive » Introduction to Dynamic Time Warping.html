@@ -1,0 +1,366 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!-- saved from url=(0071)http://www.mblondel.org/journal/2009/08/31/dynamic-time-warping-theory/ -->
+<html xmlns="http://www.w3.org/1999/xhtml" dir="ltr" lang="en-US"><head profile="http://gmpg.org/xfn/11"><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+
+<title>Mathieu's log  » Blog Archive   » Introduction to Dynamic Time Warping</title>
+
+<link rel="stylesheet" href="./Mathieu's log » Blog Archive » Introduction to Dynamic Time Warping_files/style.css" type="text/css" media="screen">
+<link rel="alternate" type="application/rss+xml" title="Mathieu&#39;s log RSS Feed" href="http://www.mblondel.org/journal/feed/">
+<link rel="pingback" href="http://www.mblondel.org/journal/xmlrpc.php">
+
+<style type="text/css" media="screen">
+
+	#page { background: url("http://www.mblondel.org/journal/wp-content/themes/default/images/kubrickbgwide.jpg") repeat-y top; border: none; }
+
+</style>
+
+<link rel="alternate" type="application/rss+xml" title="Mathieu&#39;s log » Introduction to Dynamic Time Warping Comments Feed" href="http://www.mblondel.org/journal/2009/08/31/dynamic-time-warping-theory/feed/">
+<script type="text/javascript" src="./Mathieu's log » Blog Archive » Introduction to Dynamic Time Warping_files/si_captcha.js"></script><style type="text/css"></style>
+<link rel="EditURI" type="application/rsd+xml" title="RSD" href="http://www.mblondel.org/journal/xmlrpc.php?rsd">
+<link rel="wlwmanifest" type="application/wlwmanifest+xml" href="http://www.mblondel.org/journal/wp-includes/wlwmanifest.xml"> 
+<link rel="index" title="Mathieu&#39;s log" href="http://www.mblondel.org/journal/">
+<link rel="start" title="Building a mini Debian based router/firewall" href="http://www.mblondel.org/journal/2006/03/28/building-a-mini-debian-based-routerfirewall/">
+<link rel="prev" title="Dictzip reader in Ruby" href="http://www.mblondel.org/journal/2009/01/05/dictzip-reader-in-ruby/">
+<link rel="next" title="Easy parallelization with data decomposition" href="http://www.mblondel.org/journal/2009/11/27/easy-parallelization-with-data-decomposition/">
+<meta name="generator" content="WordPress 3.0.4">
+<link rel="canonical" href="http://www.mblondel.org/journal/2009/08/31/dynamic-time-warping-theory/">
+<link rel="shortlink" href="http://www.mblondel.org/journal/?p=116">
+
+<link rel="stylesheet" href="./Mathieu's log » Blog Archive » Introduction to Dynamic Time Warping_files/wp-syntax.css" type="text/css" media="screen">
+<style type="text/css">
+/* <![CDATA[ */
+img.latex { vertical-align: middle; border: none; }
+/* ]]> */
+</style>
+</head>
+<body><div id="StayFocusd-infobar" style="display: none; top: 1714.29px;">
+    <img src="chrome-extension://laankejkbhbdhmipfmgcngdelahlfoji/common/img/eye_19x19_red.png">
+    <span id="StayFocusd-infobar-msg"></span>
+    <span id="StayFocusd-infobar-links">
+        <a id="StayFocusd-infobar-never-show">hide forever</a>&nbsp;&nbsp;|&nbsp;&nbsp;
+        <a id="StayFocusd-infobar-hide">hide once</a>
+    </span>
+</div>
+<div id="page">
+
+
+<div id="header">
+	<div id="headerimg">
+		<h1><a href="http://www.mblondel.org/journal/">Mathieu's log</a></h1>
+		<div class="description">Machine Learning, Data Mining, Natural Language Processing…</div>
+	</div>
+</div>
+<hr>
+
+	<div id="content" class="widecolumn">
+
+	
+		<div class="navigation">
+			<div class="alignleft">« <a href="http://www.mblondel.org/journal/2009/01/05/dictzip-reader-in-ruby/" rel="prev">Dictzip reader in Ruby</a></div>
+			<div class="alignright"><a href="http://www.mblondel.org/journal/2009/11/27/easy-parallelization-with-data-decomposition/" rel="next">Easy parallelization with data decomposition</a> »</div>
+		</div>
+
+		<div class="post" id="post-116">
+			<h2>Introduction to Dynamic Time Warping</h2>
+
+			<div class="entry">
+				<p>Recently, I’ve been working on a new handwriting recognition engine for <a href="http://www.tegaki.org/">Tegaki</a> based on <a href="http://en.wikipedia.org/wiki/Dynamic_time_warping">Dynamic Time Warping</a> and I figured it would be interesting to make a short, informal introduction to it.</p>
+<p>Dynamic Time Warping (DTW) is a well-known algorithm which aims at comparing and aligning two sequences of data points (a.k.a <a href="http://en.wikipedia.org/wiki/Time_series">time series</a>). Although it was originally developed for speech recognition (see [1]), it has also been applied to many other fields like <a href="http://en.wikipedia.org/wiki/Bioinformatics">bioinformatics</a>, <a href="http://en.wikipedia.org/wiki/Econometrics">econometrics</a> and, of course, handwriting recognition.<br>
+<span id="more-116"></span><br>
+Consider two sequences A and B, composed respectively of n and m <a href="http://en.wikipedia.org/wiki/Feature_vector">feature vectors</a>. </p>
+<p><img src="./Mathieu's log » Blog Archive » Introduction to Dynamic Time Warping_files/dtw3.gif"></p>
+<p>Each feature vector is d-dimensional and can thus be represented as a point in a d-dimensional <a href="http://en.wikipedia.org/wiki/Feature_space">space</a>. For example, in handwriting recognition, we could directly use the raw (x,y) coordinates of the pen movement and that would make us sequences of 2-dimensional vectors. In practice however, one would extract more useful features from (x,y) and create vectors of dimension possibly greater than 2.  It’s also worth noting that the sequences A and B can be of different length.</p>
+<h3>Time warping</h3>
+<p>DTW works by warping (hence the name) the time axis iteratively until an optimal match between the two sequences is found.</p>
+<p><img src="./Mathieu's log » Blog Archive » Introduction to Dynamic Time Warping_files/dtw1.gif"></p>
+<p>In the figure above, which is an example of two sequences of data points with only 1 dimension, the time axis is warped so that each data point in the green sequence is optimally aligned to a point in the blue sequence.</p>
+<h3>Best path</h3>
+<p>We can construct a n x m distance matrix. In this matrix, each cell (i,j) represents the distance between the i-th element of sequence A and the j-th element of sequence B. The distance <a href="http://en.wikipedia.org/wiki/Metric_%28mathematics%29">metric</a> used depends on the application but a common metric is the <a href="http://en.wikipedia.org/wiki/Euclidean_distance">euclidean distance</a>.</p>
+<p><img src="./Mathieu's log » Blog Archive » Introduction to Dynamic Time Warping_files/dtw2.gif"></p>
+<p>Finding the best alignment between two sequences can be seen as finding the shortest path to go from the bottom-left cell to the top-right cell of that matrix. The length of a path is simply the sum of all the cells that were visited along that path. The further away the optimal path wanders from the diagonal, the more the two sequences need to be warped to match together.</p>
+<p>The brute force approach to finding the shortest path would be to try each path one by one and finally select the shortest one. However it’s apparent that it would result in an explosion of paths to explore, especially if the two sequences are long. To solve this problem, DTW uses two things: constraints and dynamic programming.</p>
+<h3>Constraints</h3>
+<p>DTW can impose several kinds of reasonable constraints, to limit the number of paths to explore.</p>
+<ul>
+<li>Monotonicity: The alignment path doesn’t go back in time index. This guarantees that features are not repeated in the alignment.</li>
+<li>Continuity: The alignment doesn’t jump in time index. This guarantees that important features are not omitted.</li>
+<li>Boundary: The alignment starts at the bottom-left and ends at the top-right. This guarantees that the sequences are not considered only partially.</li>
+<li>Warping window: A good alignment path is unlikely to wander too far from the diagonal. This guarantees that the alignment doesn’t try to skip different features or get stuck at similar features.</li>
+<li>Shape: Aligned paths shouldn’t be too steep or too shallow. This prevents short sequences to be aligned with long ones.</li>
+</ul>
+<p>These constraints are best visualized in [3].</p>
+<h3>Dynamic Programming</h3>
+<p>Taking advantage of such constraints, DTW uses <a href="http://en.wikipedia.org/wiki/Dynamic_programming">dynamic programming</a> to find the best alignment in a recursive way. Previously, the cell (i,j) of the distance matrix was defined as “the distance between the i-th element of sequence A and the j-th element of sequence B”. In the dynamic programming way of thinking, this definition is changed, and instead, the cell (i,j) is defined as the length of the shortest path <strong>up to</strong> that cell. Assuming local constraints like below, </p>
+<p><img src="./Mathieu's log » Blog Archive » Introduction to Dynamic Time Warping_files/dtw5.jpg"></p>
+<p>it allows us to define the cell (i,j) recursively:</p>
+<p>cell(i,j) = local_distance(i,j) + MIN(cell(i-1,j), cell(i-1,j-1), cell(i, j-1))</p>
+<p>Here, recursively means that the shortest path up to the cell (i,j) is defined in terms of the shortest path up to the adjacent cells. A lot of different local constraints can be defined (see this <a href="http://www.mblondel.org/images/dtw4.jpg">table</a>) and thus there are many variations in the way DTW can be implemented.</p>
+<h3>DTW as a distance metric</h3>
+<p>Once the algorithm has reached the top-right cell, we can use <a href="http://en.wikipedia.org/wiki/Backtracking">backtracking</a> in order to retrieve the best alignment. If we’re just interested in comparing the two sequences however, then the top-right cell of the matrix just happens to be the length of the shortest path. We can therefore use the value stored in this cell as the distance between the two sequences. DTW has the nice property to be symmetric so DTW(a,b) = DTW(b,a). However, DTW doesn’t fulfill the <a href="http://en.wikipedia.org/wiki/Triangle_inequality">triangle inequality</a> (but it isn’t a problem in practice).</p>
+<h3>Related algorithms</h3>
+<p>DTW looks almost identical to the <a href="http://en.wikipedia.org/wiki/Levenshtein_distance">Levenshtein algorithm</a>, an algorithm to compare strings, and is very similar to the <a href="http://en.wikipedia.org/wiki/Smith-Waterman_algorithm">Smith-Waterman algorithm</a>, an algorithm for <a href="http://en.wikipedia.org/wiki/Sequence_alignment">sequence alignment</a>.</p>
+<h3>References</h3>
+<p>[1] Sakoe, H. and Chiba, S., Dynamic programming algorithm optimization for spoken word recognition, IEEE Transactions on Acoustics, Speech and Signal Processing, 26(1) pp. 43- 49, 1978</p>
+<p>[2]  <a href="http://www.psb.ugent.be/cbd/papers/gentxwarper/DTWalgorithm.htm">DTW algorithm @ GenTχWarper</a></p>
+<p>[3] <a href="http://www.psb.ugent.be/cbd/papers/gentxwarper/DTWAlgorithm.ppt">PowerPoint presentation by Elena Tsiporkova</a></p>
+
+								
+				<p class="postmetadata alt">
+					<small>
+						This entry was posted
+												on Monday, August 31st, 2009 at 6:28 am						and is filed under <a href="http://www.mblondel.org/journal/category/image-processing/" title="View all posts in Image Processing" rel="category tag">Image Processing</a>, <a href="http://www.mblondel.org/journal/category/machine-learning/" title="View all posts in Machine Learning" rel="category tag">Machine Learning</a>.
+						You can follow any responses to this entry through the <a href="http://www.mblondel.org/journal/2009/08/31/dynamic-time-warping-theory/feed/">RSS 2.0</a> feed.
+
+													Both comments and pings are currently closed.
+
+						
+					</small>
+				</p>
+
+			</div>
+		</div>
+
+	
+<!-- You can start editing here. -->
+
+	<h3 id="comments">15 Responses to “Introduction to Dynamic Time Warping”</h3>
+
+	<ol class="commentlist">
+
+	
+		<li class="alt" id="comment-193594">
+			<img alt="" src="./Mathieu's log » Blog Archive » Introduction to Dynamic Time Warping_files/5c8ea1249d8f6014c9ff2520a10629d1" class="avatar avatar-32 photo" height="32" width="32">			<cite><a href="http://www.wahlau.org/" rel="external nofollow" class="url">wahlau</a></cite> Says:
+						<br>
+
+			<small class="commentmetadata"><a href="http://www.mblondel.org/journal/2009/08/31/dynamic-time-warping-theory/#comment-193594" title="">October 14th, 2009 at 1:49 pm</a> </small>
+
+			<p>if you need one that will work under python, you can take a look at mlpy libraries (<a href="https://mlpy.fbk.eu/" rel="nofollow">https://mlpy.fbk.eu/</a>). Hope this helps.</p>
+<p>thanks for the informative writings…</p>
+
+		</li>
+
+	
+	
+		<li id="comment-195848">
+						<cite><a href="http://www.mblondel.org/journal/2009/11/27/first-look-at-cython/" rel="external nofollow" class="url">Mathieu’s log » Blog Archive » First look at Cython</a></cite> Says:
+						<br>
+
+			<small class="commentmetadata"><a href="http://www.mblondel.org/journal/2009/08/31/dynamic-time-warping-theory/#comment-195848" title="">November 27th, 2009 at 9:14 am</a> </small>
+
+			<p>[...] try Cython, I’ve written a small extension to perform Dynamic Time Warping (see my  recent post). Rather than writing my extension entirely in Cython, I’ve opted for the solution of writing [...]</p>
+
+		</li>
+
+	
+	
+		<li class="alt" id="comment-199469">
+						<cite><a href="http://www.mblondel.org/journal/2010/02/09/seam-carving-in-python/" rel="external nofollow" class="url">Mathieu’s log » Blog Archive » Seam Carving in Python</a></cite> Says:
+						<br>
+
+			<small class="commentmetadata"><a href="http://www.mblondel.org/journal/2009/08/31/dynamic-time-warping-theory/#comment-199469" title="">February 9th, 2010 at 4:57 pm</a> </small>
+
+			<p>[...] The principle is very simple. Find the connected paths of low energy pixels (”the seams”). This can be done efficiently by dynamic programming (see my post on DTW). [...]</p>
+
+		</li>
+
+	
+	
+		<li id="comment-225434">
+			<img alt="" src="./Mathieu's log » Blog Archive » Introduction to Dynamic Time Warping_files/6733fc7f8c11e5d4f862a22cb086f962" class="avatar avatar-32 photo" height="32" width="32">			<cite><a href="http://www.i.kyoto-u.ac.jp/~mcuturi" rel="external nofollow" class="url">marco</a></cite> Says:
+						<br>
+
+			<small class="commentmetadata"><a href="http://www.mblondel.org/journal/2009/08/31/dynamic-time-warping-theory/#comment-225434" title="">January 6th, 2011 at 11:05 am</a> </small>
+
+			<p>here’s an extension to the DTW score that turns it into a positive definite kernel: <a href="http://arxiv.org/abs/cs.CV/0610033" rel="nofollow">http://arxiv.org/abs/cs.CV/0610033</a></p>
+
+		</li>
+
+	
+	
+		<li class="alt" id="comment-225888">
+			<img alt="" src="./Mathieu's log » Blog Archive » Introduction to Dynamic Time Warping_files/af78619231b186055bdd40c5057af17d" class="avatar avatar-32 photo" height="32" width="32">			<cite><a href="http://www.mblondel.org/" rel="external nofollow" class="url">Mathieu</a></cite> Says:
+						<br>
+
+			<small class="commentmetadata"><a href="http://www.mblondel.org/journal/2009/08/31/dynamic-time-warping-theory/#comment-225888" title="">January 8th, 2011 at 6:52 pm</a> </small>
+
+			<p>J’ai valide ton commentaire mais il y a un bug dans la moderation des commentaires dans la version de WordPress qui est pour l’instant installee sur ce serveur. Il faut que je prenne le temps de faire la mise a jour. Pour l’instant, je crois avoir compris comment contourner le bug. Peux-tu reposter le lien? Merci et vraiment desole !</p>
+<p>EDIT: J’ai mis a jour WordPress et j’ai pu retrouver le commentaire grace a une interface de recherche qu’il n’y avait pas avant.</p>
+<p>J’ai regarde la video de ta presentation sur l’utilisation d’histogramme dans un kernel. Cela m’a beaucoup interesse car j’ai utilise le Fisher kernel recemment et j’ai d’autres idees qui pourraient tirer profit d’une distribution.</p>
+
+		</li>
+
+	
+	
+		<li id="comment-225808">
+			<img alt="" src="./Mathieu's log » Blog Archive » Introduction to Dynamic Time Warping_files/6733fc7f8c11e5d4f862a22cb086f962" class="avatar avatar-32 photo" height="32" width="32">			<cite><a href="http://www.i.kyoto-u.ac.jp/~mcuturi" rel="external nofollow" class="url">marco</a></cite> Says:
+						<br>
+
+			<small class="commentmetadata"><a href="http://www.mblondel.org/journal/2009/08/31/dynamic-time-warping-theory/#comment-225808" title="">January 8th, 2011 at 11:39 am</a> </small>
+
+			<p>un peu surpris de voir que mon precedent commentaire a ete efface et classe comme du spam alors qu’il parlait de travaux directement relies au DTW.</p>
+
+		</li>
+
+	
+	
+		<li class="alt" id="comment-225919">
+			<img alt="" src="./Mathieu's log » Blog Archive » Introduction to Dynamic Time Warping_files/6733fc7f8c11e5d4f862a22cb086f962" class="avatar avatar-32 photo" height="32" width="32">			<cite><a href="http://www.i.kyoto-u.ac.jp/~mcuturi" rel="external nofollow" class="url">marco</a></cite> Says:
+						<br>
+
+			<small class="commentmetadata"><a href="http://www.mblondel.org/journal/2009/08/31/dynamic-time-warping-theory/#comment-225919" title="">January 10th, 2011 at 1:07 am</a> </small>
+
+			<p>Ah bon! si c etait juste un bug pas de probleme!! Je croyais que ca t’avais paru hors-sujet et je me demandais pourquoi…</p>
+<p>je vois de quelle presentation tu parles ;) malheureusement les idees que je souleve dans cette video ne sont pas tres utiles en pratique, les quantites qui m interessaient dans ce papier sont incalculables et pas vraiment approximables non plus… (quoique, y a l air d y avoir pas mal d efforts dans ce sens la dernierement). Mais c est vrai que de maniere generale c est important de pouvoir mesurer la similarite entre deux histogrammes. Tu t’interesses aux methodes a noyaux en ce moment? En tous cas felicitations pour ton journal, c’est sympa de lire des articles de vulgarisation / code comme les tiens.</p>
+
+		</li>
+
+	
+	
+		<li id="comment-225920">
+			<img alt="" src="./Mathieu's log » Blog Archive » Introduction to Dynamic Time Warping_files/af78619231b186055bdd40c5057af17d" class="avatar avatar-32 photo" height="32" width="32">			<cite><a href="http://www.mblondel.org/" rel="external nofollow" class="url">Mathieu</a></cite> Says:
+						<br>
+
+			<small class="commentmetadata"><a href="http://www.mblondel.org/journal/2009/08/31/dynamic-time-warping-theory/#comment-225920" title="">January 10th, 2011 at 3:10 am</a> </small>
+
+			<p>Oui j’utilise les methodes a noyau pour l’instant uniquement comme application. J’ai une idee de noyau qui pourrait utiliser une distribution et j’aimerais commencer a m’interesser a MKL egalement.</p>
+<p>Je serai a MPS (<a href="http://daemon.ice.uec.ac.jp/MPSPortal/events/mps82cfp" rel="nofollow">http://daemon.ice.uec.ac.jp/MPSPortal/events/mps82cfp</a>, Miyazaki, 7 mars) et vraisemblablement a IBIS-ML (<a href="http://ibisml.org/ibisml004" rel="nofollow">http://ibisml.org/ibisml004</a>, Osaka, 28 Mars).</p>
+
+		</li>
+
+	
+	
+		<li class="alt" id="comment-226859">
+			<img alt="" src="./Mathieu's log » Blog Archive » Introduction to Dynamic Time Warping_files/c0a0c434ca2882da0f66c9f64d3b846f" class="avatar avatar-32 photo" height="32" width="32">			<cite>Shardul</cite> Says:
+						<br>
+
+			<small class="commentmetadata"><a href="http://www.mblondel.org/journal/2009/08/31/dynamic-time-warping-theory/#comment-226859" title="">April 18th, 2011 at 2:00 am</a> </small>
+
+			<p>Hey Mathieu,</p>
+<p>I am trying to use DTW to just align time series data on which I wish to perform K means clustering and subsequently an HMM. But I have not been able to find on how to use DTW just to align two time series data and not use it to classify. Any suggestions?</p>
+<p>Thanks,<br>
+Shardul</p>
+
+		</li>
+
+	
+	
+		<li id="comment-226862">
+			<img alt="" src="./Mathieu's log » Blog Archive » Introduction to Dynamic Time Warping_files/af78619231b186055bdd40c5057af17d" class="avatar avatar-32 photo" height="32" width="32">			<cite><a href="http://www.mblondel.org/" rel="external nofollow" class="url">Mathieu</a></cite> Says:
+						<br>
+
+			<small class="commentmetadata"><a href="http://www.mblondel.org/journal/2009/08/31/dynamic-time-warping-theory/#comment-226862" title="">April 18th, 2011 at 6:33 pm</a> </small>
+
+			<p>Once you have computed the matrix, you need to perform backtracking to find the best path (the red dots on the picture above). From this path, you can retrieve the alignment easily. For example, from the picture above, you can see that the point n, n-1 and n-2 are aligned with the point m. Backtracking just consists in applying the recursive rule backward. Google “DTW backtracking” for more information.</p>
+
+		</li>
+
+	
+	
+		<li class="alt" id="comment-227156">
+			<img alt="" src="./Mathieu's log » Blog Archive » Introduction to Dynamic Time Warping_files/03009d0edadd59d92044edb5c42b7de4" class="avatar avatar-32 photo" height="32" width="32">			<cite>amira</cite> Says:
+						<br>
+
+			<small class="commentmetadata"><a href="http://www.mblondel.org/journal/2009/08/31/dynamic-time-warping-theory/#comment-227156" title="">June 2nd, 2011 at 9:21 am</a> </small>
+
+			<p>thanks for ur support, i want to ask how to use DTW for matching humana motion trajectories as i represent human action as set of trajectory.</p>
+<p>each point in trajectory has (x,y) dimension . really i have two matrix one for x cordinate of all trajectory and second for y cordinate of all trajectory(all trajectory belong to single human action ex:human walk)</p>
+<p>so i need two integrate two matrix in single matrix and match resulted matrix refrence matrix with different length</p>
+<p>could u help me to modify DTW for human action trajectory matching</p>
+
+		</li>
+
+	
+	
+		<li id="comment-227164">
+			<img alt="" src="./Mathieu's log » Blog Archive » Introduction to Dynamic Time Warping_files/af78619231b186055bdd40c5057af17d" class="avatar avatar-32 photo" height="32" width="32">			<cite><a href="http://www.mblondel.org/" rel="external nofollow" class="url">Mathieu</a></cite> Says:
+						<br>
+
+			<small class="commentmetadata"><a href="http://www.mblondel.org/journal/2009/08/31/dynamic-time-warping-theory/#comment-227164" title="">June 2nd, 2011 at 6:42 pm</a> </small>
+
+			<p>Say you have A = ((A_x1,A_y1), …, (A_xn, A_yn)) and B = ((B_x1,B_y1), …, (B_xm, B_ym)), then the cell (i,j) of the distance matrix I mentioned above is D[i,j]^2 = (A_xi – B_xj) ^2 + (A_yi – B_yj)^2.</p>
+
+		</li>
+
+	
+	
+		<li class="alt" id="comment-227179">
+			<img alt="" src="./Mathieu's log » Blog Archive » Introduction to Dynamic Time Warping_files/03009d0edadd59d92044edb5c42b7de4" class="avatar avatar-32 photo" height="32" width="32">			<cite>amira</cite> Says:
+						<br>
+
+			<small class="commentmetadata"><a href="http://www.mblondel.org/journal/2009/08/31/dynamic-time-warping-theory/#comment-227179" title="">June 4th, 2011 at 2:40 pm</a> </small>
+
+			<p>#of coulmn of y matrix= # of coulmn of x matrix=col=N<br>
+#of row of matrix x = row_x  , # of row of matrix y =row_y</p>
+<p>so the representation look as follow:<br>
+A=[x1,...........,x"col";x2,............x''col";................;x"row_x,...........,x"col", y"row_x+1",.......y"col";................;y"row_y".....,y"col"] “is this representation is OK”</p>
+<p>all the x cordinate in tthe x  first rows followed by y cordinate in next rows.<br>
+and matrix y the same.<br>
+so iwill use : D[i,j]^2 = (A_xi – B_xj) ^2 + (A_yi – B_yj)^2 ..to replace the line code come belowe<br>
+ where N =#of col of Matrix A<br>
+where M =#of col of Matrix B</p>
+<p>for i=2:N<br>
+    for j=2:M<br>
+        D(i,j)=d(i,j)+min([D(i-1,j),D(i-1,j-1),D(i,j-1)]);//this line code to replace<br>
+    end<br>
+end</p>
+<p>why u calculate D[i,j]^2 not D[i,j] ?<br>
+can u help me to reprsent distance matrix u have written using matlab .?</p>
+<p>when i  plot matrix A and matrix B in matlab give error”that they must have same dimension”<br>
+ how that if the main advantage of DTW to match vector with different length?</p>
+
+		</li>
+
+	
+	
+		<li id="comment-228981">
+			<img alt="" src="./Mathieu's log » Blog Archive » Introduction to Dynamic Time Warping_files/1dd657eead7fb895071622e7b6433858" class="avatar avatar-32 photo" height="32" width="32">			<cite><a href="http://lsmy.co.uk/" rel="external nofollow" class="url">lewis</a></cite> Says:
+						<br>
+
+			<small class="commentmetadata"><a href="http://www.mblondel.org/journal/2009/08/31/dynamic-time-warping-theory/#comment-228981" title="">November 24th, 2011 at 8:03 pm</a> </small>
+
+			<p>Hey man, Im working on a gesture recognition engine using kinect to capture data as my uni dissertation, this was extremely helpful! its the most easy to follow description of DTW i found on the net. quality effot!</p>
+
+		</li>
+
+	
+	
+		<li class="alt" id="comment-229344">
+			<img alt="" src="./Mathieu's log » Blog Archive » Introduction to Dynamic Time Warping_files/d31a2a2d43191b15ca4a1c7ec7d03038" class="avatar avatar-32 photo" height="32" width="32">			<cite>noname</cite> Says:
+						<br>
+
+			<small class="commentmetadata"><a href="http://www.mblondel.org/journal/2009/08/31/dynamic-time-warping-theory/#comment-229344" title="">December 12th, 2011 at 1:56 am</a> </small>
+
+			<p>Hi,  an open-source implementation of various dtw algorithms is available for R at <a href="http://dtw.r-forge.r-project.org/" rel="nofollow">http://dtw.r-forge.r-project.org</a> . It has an extensive manual and is callable from Python. Should work well for rapid experimentation.</p>
+
+		</li>
+
+	
+	
+	</ol>
+
+ 
+
+
+	
+	</div>
+
+
+<hr>
+<div id="footer">
+<!-- If you'd like to support WordPress, having the "powered by" link somewhere on your blog is the best way; it's our only promotion or advertising. -->
+	<p>
+		Mathieu's log is proudly powered by
+		<a href="http://wordpress.org/">WordPress</a>
+		<br><a href="http://www.mblondel.org/journal/feed/">Entries (RSS)</a>
+		and <a href="http://www.mblondel.org/journal/comments/feed/">Comments (RSS)</a>.
+		<!-- 15 queries. 0.088 seconds. -->
+	</p>
+</div>
+</div>
+
+<!-- Gorgeous design by Michael Heilemann - http://binarybonsai.com/kubrick/ -->
+
+		
+
+</body></html>
