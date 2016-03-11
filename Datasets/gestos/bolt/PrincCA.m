@@ -1,22 +1,24 @@
 close all;
 clearvars;
 clc;
-Y = randn(100,2);
-W = [1 1; 1 -1; 2 1; 2 -1]';
-X = Y * W + 0.1 * randn(100,4);
+%% Since we are reading the values of 12 joints here we chooose the one to
+%%evaluate
 joint_number=1;
+
+%% Data reading from bolt movement (leData is a simple function that reads the formatted data 
+%from txt files
 g1='medeiros-bolt2015-12-7-17-4-31';
-Dados1=leDados(g1);
+Data1=leData(g1);
 g2='medeiros-bolt2015-12-7-17-5-12';
-Dados2=leDados(g2);
+Data2=leData(g2);
 g3='medeiros-bolt2015-12-7-17-5-24';
-Dados3=leDados(g3);
+Data3=leData(g3);
 g4='rui-bolt2015-12-7-17-5-49';
-Dados4=leDados(g4);
+Data4=leData(g4);
 g5='rui-bolt2015-12-7-17-6-3';
-Dados5=leDados(g5);
+Data5=leData(g5);
 g6='rui-bolt2015-12-7-17-6-14';
-Dados6=leDados(g6);
+Data6=leData(g6);
 
 % XNorm = X;
 % mu = zeros(1, size(X, 2));
@@ -32,28 +34,27 @@ Dados6=leDados(g6);
 
 
 
-%% Para termos de perceção e comparação de resultados é importante comparar
-% as variáveis temporalmente
-% Sabendo que as amostras têm uma frequência 10 hz(100 milisegundos por amostra) e a maior recolha de
-% dados foi de entre os Dados1 e Dados2 foi 104:
-
-
-
+%% So we can have perception and comparison of the data we need to introduce the time constant since 
+% we acquire data at a frequency of 10 hz(100 miliseconds per sample) we use that information to 
+% generate the time vectors. For example we take the size of "Data1" and from a specific joint 
+% number into the variable m1 -- [m1,n1]=size(Data1(:,joint_number)); and use that information to 
+% build vector t1(time 1) -- t1=0:100/10^3:m1*100/10^3-100/10^3;
 
 figure('Name','Data Warping before DTW');
-[m1,n1]=size(Dados1(:,joint_number));
+[m1,n1]=size(Data1(:,joint_number));
 t1=0:100/10^3:m1*100/10^3-100/10^3;
-[m2,n2]=size(Dados2(:,joint_number));
+[m2,n2]=size(Data2(:,joint_number));
 t2=0:100/10^3:m2*100/10^3-100/10^3;
-[m3,n3]=size(Dados3(:,joint_number));
+[m3,n3]=size(Data3(:,joint_number));
 t3=0:100/10^3:m3*100/10^3-100/10^3;
-[m4,n4]=size(Dados4(:,joint_number));
+[m4,n4]=size(Data4(:,joint_number));
 t4=0:100/10^3:m4*100/10^3-100/10^3;
-[m5,n5]=size(Dados5(:,joint_number));
+[m5,n5]=size(Data5(:,joint_number));
 t5=0:100/10^3:m5*100/10^3-100/10^3;
-[m6,n6]=size(Dados6(:,joint_number));
+[m6,n6]=size(Data6(:,joint_number));
 t6=0:100/10^3:m6*100/10^3-100/10^3;
 
+%% On a first aproach we want to align data to the smallest Data vector   
 aux=m6;
 if aux>m1
     aux=m1;
@@ -67,61 +68,66 @@ elseif aux>m5
     aux=m5;
 end
 
-vector1=resizer(Dados1(:,joint_number)',aux,m1);
+vector1=resizer(Data1(:,joint_number)',aux,m1);
+vector2=resizer(Data2(:,joint_number)',aux,m2);
+vector3=resizer(Data3(:,joint_number)',aux,m3);
+vector4=resizer(Data4(:,joint_number)',aux,m4);
+vector5=resizer(Data5(:,joint_number)',aux,m5);
+vector6=resizer(Data6(:,joint_number)',aux,m6);
 
 
 title('Data before time warping');
 
 subplot(6,1,1)
-plot(t1,Dados1(:,joint_number),'r-x')
+plot(t1,Data1(:,joint_number),'r-x')
 axis([0 11 -2 2])
 axis on;
-ylabel('Dados1');
+ylabel('Data1');
 xlabel('Time');
 grid on;
 
 
 subplot(6,1,2)
-plot(t2,Dados2(:,joint_number),'b-*')
+plot(t2,Data2(:,joint_number),'b-*')
 axis([0 11 -2 2])
 axis on;
-ylabel('Dados2');
+ylabel('Data2');
 xlabel('Time');
 grid on;
 
 
 subplot(6,1,3)
-plot(t3,Dados3(:,joint_number),'r-x')
+plot(t3,Data3(:,joint_number),'r-x')
 axis([0 11 -2 2])
 axis on;
-ylabel('Dados3');
+ylabel('Data3');
 xlabel('Time');
 grid on;
 
 
 subplot(6,1,4)
-plot(t4,Dados4(:,joint_number),'b-*')
+plot(t4,Data4(:,joint_number),'b-*')
 axis([0 11 -2 2])
 axis on;
-ylabel('Dados4');
+ylabel('Data4');
 xlabel('Time');
 grid on;
 
 
 subplot(6,1,5)
-plot(t5,Dados5(:,joint_number),'r-x')
+plot(t5,Data5(:,joint_number),'r-x')
 axis([0 11 -2 2])
 axis on;
-ylabel('Dados5');
+ylabel('Data5');
 xlabel('Time');
 grid on;
 
 
 subplot(6,1,6)
-plot(t6,Dados6(:,joint_number),'b-*')
+plot(t6,Data6(:,joint_number),'b-*')
 axis([0 11 -2 2])
 axis on;
-ylabel('Dados6');
+ylabel('Data6');
 xlabel('Time');
 grid on;
 
@@ -129,12 +135,12 @@ grid on;
 
 pflag=0;
 
-[dtw_Dist,D,dtw_k,w,s1w,s2w]=dtw(Dados1(:,joint_number),Dados3(:,joint_number),pflag);
-[dtw_Dist,D,dtw_k,w,s3w,s4w]=dtw(Dados2(:,joint_number),Dados3(:,joint_number),pflag);
-[dtw_Dist,D,dtw_k,w,s5w,s6w]=dtw(Dados3(:,joint_number),Dados3(:,joint_number),pflag);
-[dtw_Dist,D,dtw_k,w,s7w,s8w]=dtw(Dados4(:,joint_number),Dados3(:,joint_number),pflag);
-[dtw_Dist,D,dtw_k,w,s9w,s10w]=dtw(Dados5(:,joint_number),Dados3(:,joint_number),pflag);
-[dtw_Dist,D,dtw_k,w,s11w,s12w]=dtw(Dados6(:,joint_number),Dados3(:,joint_number),pflag);
+[dtw_Dist,D,dtw_k,w,s1w,s2w]=dtw(Data1(:,joint_number),Data3(:,joint_number),pflag);
+[dtw_Dist,D,dtw_k,w,s3w,s4w]=dtw(Data2(:,joint_number),Data3(:,joint_number),pflag);
+[dtw_Dist,D,dtw_k,w,s5w,s6w]=dtw(Data3(:,joint_number),Data3(:,joint_number),pflag);
+[dtw_Dist,D,dtw_k,w,s7w,s8w]=dtw(Data4(:,joint_number),Data3(:,joint_number),pflag);
+[dtw_Dist,D,dtw_k,w,s9w,s10w]=dtw(Data5(:,joint_number),Data3(:,joint_number),pflag);
+[dtw_Dist,D,dtw_k,w,s11w,s12w]=dtw(Data6(:,joint_number),Data3(:,joint_number),pflag);
 
 
 
@@ -209,7 +215,7 @@ hold on;
 % 
 % 
 % 
-% %Teste=[Dados1(:,1),Dados2(:,1),Dados3(:,1),Dados4(:,1),Dados5(:,1),Dados6(:,1)];
+% %Teste=[Data1(:,1),Data2(:,1),Data3(:,1),Data4(:,1),Data5(:,1),Data6(:,1)];
 % [w, pc, ev] = pca(X);
 % 
 % 

@@ -1,10 +1,12 @@
 close all;
 clearvars;
 clc;
-Y = randn(100,2);
-W = [1 1; 1 -1; 2 1; 2 -1]';
-X = Y * W + 0.1 * randn(100,4);
+%% Since we are reading the values of 12 joints here we chooose the one to
+%%evaluate
 joint_number=1;
+
+%% Data reading from bolt movement (ledados is a simple function that reads the formatted data 
+%from txt files
 g1='medeiros-bolt2015-12-7-17-4-31';
 Dados1=leDados(g1);
 g2='medeiros-bolt2015-12-7-17-5-12';
@@ -14,9 +16,9 @@ Dados3=leDados(g3);
 g4='rui-bolt2015-12-7-17-5-49';
 Dados4=leDados(g4);
 g5='rui-bolt2015-12-7-17-6-3';
-Dados5=leDados(g);
+Dados5=leDados(g5);
 g6='rui-bolt2015-12-7-17-6-14';
-Dados6=leDados(g);
+Dados6=leDados(g6);
 
 % XNorm = X;
 % mu = zeros(1, size(X, 2));
@@ -32,27 +34,46 @@ Dados6=leDados(g);
 
 
 
-%% Para termos de perceção e comparação de resultados é importante comparar
-% as variáveis temporalmente
-% Sabendo que as amostras têm uma frequência 10 hz(100 milisegundos por amostra) e a maior recolha de
-% dados foi de entre os Dados1 e Dados2 foi 104:
-
-
-
+%% So we can have perception and comparison of the data we need to introduce the time constant since 
+% we acquire data at a frequency of 10 hz(100 miliseconds per sample) we use that information to 
+% generate the time vectors. For example we take the size of "Dados1" and from a specific joint 
+% number into the variable m1 -- [m1,n1]=size(Dados1(:,joint_number)); and use that information to 
+% build vector t1(time 1) -- t1=0:100/10^3:m1*100/10^3-100/10^3;
 
 figure('Name','Data Warping before DTW');
-[m,n]=size(Dados1(:,joint_number));
-t1=0:100/10^3:m*100/10^3-100/10^3;
-[m,n]=size(Dados2(:,joint_number));
-t2=0:100/10^3:m*100/10^3-100/10^3;
-[m,n]=size(Dados3(:,joint_number));
-t3=0:100/10^3:m*100/10^3-100/10^3;
-[m,n]=size(Dados4(:,joint_number));
-t4=0:100/10^3:m*100/10^3-100/10^3;
-[m,n]=size(Dados5(:,joint_number));
-t5=0:100/10^3:m*100/10^3-100/10^3;
-[m,n]=size(Dados6(:,joint_number));
-t6=0:100/10^3:m*100/10^3-100/10^3;
+[m1,n1]=size(Dados1(:,joint_number));
+t1=0:100/10^3:m1*100/10^3-100/10^3;
+[m2,n2]=size(Dados2(:,joint_number));
+t2=0:100/10^3:m2*100/10^3-100/10^3;
+[m3,n3]=size(Dados3(:,joint_number));
+t3=0:100/10^3:m3*100/10^3-100/10^3;
+[m4,n4]=size(Dados4(:,joint_number));
+t4=0:100/10^3:m4*100/10^3-100/10^3;
+[m5,n5]=size(Dados5(:,joint_number));
+t5=0:100/10^3:m5*100/10^3-100/10^3;
+[m6,n6]=size(Dados6(:,joint_number));
+t6=0:100/10^3:m6*100/10^3-100/10^3;
+
+%% On a first aproach we want to align 
+aux=m6;
+if aux>m1
+    aux=m1;
+elseif aux>m2
+    aux=m2;
+elseif aux>m3
+    aux=m3;
+elseif aux>m4
+    aux=m4;
+elseif aux>m5
+    aux=m5;
+end
+
+vector1=resizer(Dados1(:,joint_number)',aux,m1);
+vector2=resizer(Dados2(:,joint_number)',aux,m2);
+vector3=resizer(Dados3(:,joint_number)',aux,m3);
+vector4=resizer(Dados4(:,joint_number)',aux,m4);
+vector5=resizer(Dados5(:,joint_number)',aux,m5);
+vector6=resizer(Dados6(:,joint_number)',aux,m6);
 
 
 title('Data before time warping');
