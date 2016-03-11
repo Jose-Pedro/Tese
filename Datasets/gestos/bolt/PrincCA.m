@@ -6,7 +6,8 @@ clc;
 joint_number=1;
 
 %% Data reading from bolt movement (leData is a simple function that reads the formatted data 
-%from txt files
+% from txt files. We have in total six samples from two people (3 samples
+% each) 
 g1='medeiros-bolt2015-12-7-17-4-31';
 Data1=leData(g1);
 g2='medeiros-bolt2015-12-7-17-5-12';
@@ -54,7 +55,9 @@ t5=0:100/10^3:m5*100/10^3-100/10^3;
 [m6,n6]=size(Data6(:,joint_number));
 t6=0:100/10^3:m6*100/10^3-100/10^3;
 
-%% On a first aproach we want to align data to the smallest Data vector   
+%% On a first aproach we want to resize data to the smallest Data vector so we first select the 
+% smallest size from all the vectors size then we resize the rest of the
+% vectors to that size.
 aux=m6;
 if aux>m1
     aux=m1;
@@ -67,7 +70,8 @@ elseif aux>m4
 elseif aux>m5
     aux=m5;
 end
-
+% Here we use the function resizer so we resize all the vectors to the
+% smallest one
 vector1=resizer(Data1(:,joint_number)',aux,m1);
 vector2=resizer(Data2(:,joint_number)',aux,m2);
 vector3=resizer(Data3(:,joint_number)',aux,m3);
@@ -76,6 +80,11 @@ vector5=resizer(Data5(:,joint_number)',aux,m5);
 vector6=resizer(Data6(:,joint_number)',aux,m6);
 
 
+%% 
+Vector_mean= (vector1 + vector1 + vector1 + vector1 + vector1 + vector1)*6;
+
+
+%%
 title('Data before time warping');
 
 subplot(6,1,1)
