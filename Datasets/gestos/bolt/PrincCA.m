@@ -1,13 +1,14 @@
 close all;
 clearvars;
 clc;
+printflag=1;
 %% Since we are reading the values of 12 joints here we chooose the one to
 %%evaluate
 joint_number=1;
 
 %% Data reading from bolt movement (leData is a simple function that reads the formatted data 
-% from txt files. We have in total six samples from two people (3 samples
-% each) 
+% from txt files. We have in total 6 samples from two people (3 samples
+% each) perfoming the same movement.
 g1='medeiros-bolt2015-12-7-17-4-31';
 Data1=leData(g1);
 g2='medeiros-bolt2015-12-7-17-5-12';
@@ -55,6 +56,63 @@ t5=0:100/10^3:m5*100/10^3-100/10^3;
 [m6,n6]=size(Data6(:,joint_number));
 t6=0:100/10^3:m6*100/10^3-100/10^3;
 
+if printflag
+    title('Data before time warping');
+
+    subplot(6,1,1)
+    plot(t1,Data1(:,joint_number),'r-x')
+    axis([0 11 -2 2])
+    axis on;
+    ylabel('Data1');
+    xlabel('Time');
+    grid on;
+
+
+    subplot(6,1,2)
+    plot(t2,Data2(:,joint_number),'b-*')
+    axis([0 11 -2 2])
+    axis on;
+    ylabel('Data2');
+    xlabel('Time');
+    grid on;
+
+
+    subplot(6,1,3)
+    plot(t3,Data3(:,joint_number),'r-x')
+    axis([0 11 -2 2])
+    axis on;
+    ylabel('Data3');
+    xlabel('Time');
+    grid on;
+
+
+    subplot(6,1,4)
+    plot(t4,Data4(:,joint_number),'b-*')
+    axis([0 11 -2 2])
+    axis on;
+    ylabel('Data4');
+    xlabel('Time');
+    grid on;
+
+
+    subplot(6,1,5)
+    plot(t5,Data5(:,joint_number),'r-x')
+    axis([0 11 -2 2])
+    axis on;
+    ylabel('Data5');
+    xlabel('Time');
+    grid on;
+
+
+    subplot(6,1,6)
+    plot(t6,Data6(:,joint_number),'b-*')
+    axis([0 11 -2 2])
+    axis on;
+    ylabel('Data6');
+    xlabel('Time');
+    grid on;
+end
+
 %% On a first aproach we want to resize data to the smallest Data vector so we first select the 
 % smallest size from all the vectors size then we resize the rest of the
 % vectors to that size.
@@ -81,64 +139,10 @@ vector6=resizer(Data6(:,joint_number)',aux,m6);
 
 
 %% 
-Vector_mean= (vector1 + vector1 + vector1 + vector1 + vector1 + vector1)*6;
+Vector_mean= (vector1 + vector1 + vector1 + vector1 + vector1 + vector1)/6;
 
 
-%%
-title('Data before time warping');
 
-subplot(6,1,1)
-plot(t1,Data1(:,joint_number),'r-x')
-axis([0 11 -2 2])
-axis on;
-ylabel('Data1');
-xlabel('Time');
-grid on;
-
-
-subplot(6,1,2)
-plot(t2,Data2(:,joint_number),'b-*')
-axis([0 11 -2 2])
-axis on;
-ylabel('Data2');
-xlabel('Time');
-grid on;
-
-
-subplot(6,1,3)
-plot(t3,Data3(:,joint_number),'r-x')
-axis([0 11 -2 2])
-axis on;
-ylabel('Data3');
-xlabel('Time');
-grid on;
-
-
-subplot(6,1,4)
-plot(t4,Data4(:,joint_number),'b-*')
-axis([0 11 -2 2])
-axis on;
-ylabel('Data4');
-xlabel('Time');
-grid on;
-
-
-subplot(6,1,5)
-plot(t5,Data5(:,joint_number),'r-x')
-axis([0 11 -2 2])
-axis on;
-ylabel('Data5');
-xlabel('Time');
-grid on;
-
-
-subplot(6,1,6)
-plot(t6,Data6(:,joint_number),'b-*')
-axis([0 11 -2 2])
-axis on;
-ylabel('Data6');
-xlabel('Time');
-grid on;
 
 
 
