@@ -1,4 +1,4 @@
-function vector=resizer(x,num,den)
+function vector=Resizer(x,num,den)
 %% num/den give us a factor of resizing that is pretended for our vector x. 
 
 if num == den % ignore when the factor is equal to 1.

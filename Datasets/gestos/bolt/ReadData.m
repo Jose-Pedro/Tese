@@ -1,4 +1,4 @@
-function [Dados] = leDados(nomeFich)
+function [Dados] = ReadData(nomeFich)
 
 fileID = fopen(nomeFich,'r');
 A=textscan(fileID, '%f %f %f %f %f %f %f %f %f %f %f %f ','Delimiter',',');
