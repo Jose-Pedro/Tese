@@ -555,8 +555,8 @@ end
 
 
 %%
-X = [vector1_w ; vector2_w ;vector3_w; vector4_w; vector5_w; vector6_w]';
-
+%X = [vector1_w ; vector2_w ;vector3_w; vector4_w; vector5_w; vector6_w]';
+X=Data1;
 
 
 
@@ -579,7 +579,7 @@ norm(pc * w' - xhat);
 
 
 
-Relevance=ev/sum(ev)*100;
+Relevance=ev/sum(ev)*100
 num_pc=1;% number of principal components to use
 while(num_pc<=size(ev,1))
     
@@ -588,7 +588,7 @@ while(num_pc<=size(ev,1))
     for i=1:num_pc
     performance=Relevance(i)+performance;
     end
-    if performance>98 % In this case we are satisfied with 98% of precision in data recovery
+    if performance>99.9 % In this case we are satisfied with 99.9% of precision in data recovery
         % with this we select the number of PC needed to accomplish that
     break;
     
@@ -596,12 +596,13 @@ while(num_pc<=size(ev,1))
     num_pc=num_pc+1;
     
 end
-
+performance
+num_pc
 
 %% To get an approximation to the original data, we can start dropping 
 % columns from the computed principal components. To get an idea of which
 % columns to drop, we examine the ev variable
-Xapprox = pc(:,1:num_pc) * w(:,1:num_pc)';
+Xapprox = pc(:,1:5) * w(:,1:5)';
 Xapprox = bsxfun(@plus,mu,Xapprox); % add the mean back in
 figure;
 plot(Xapprox(:,2),'*b'); hold on; plot(X(:,2),'.r')
