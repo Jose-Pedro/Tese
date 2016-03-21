@@ -2,6 +2,7 @@ close all;
 clearvars;
 clc;
 printflag=1;
+% with this we decide if we want to print the data before warping or not
 printflag2=1;
 %% Since we are reading the values of 12 joints here we chooose the one to
 %%evaluate
@@ -43,7 +44,7 @@ Data6=ReadData(g6);
 % number into the variable m1 -- [m1,n1]=size(Data1(:,joint_number)); and use that information to 
 % build vector t1(time 1) -- t1=0:100/10^3:m1*100/10^3-100/10^3;
 
-figure('Name','Data Warping before DTW');
+
 [m1,n1]=size(Data1(:,joint_number));
 t1=0:100/10^3:m1*100/10^3-100/10^3;
 [m2,n2]=size(Data2(:,joint_number));
@@ -56,6 +57,7 @@ t4=0:100/10^3:m4*100/10^3-100/10^3;
 t5=0:100/10^3:m5*100/10^3-100/10^3;
 [m6,n6]=size(Data6(:,joint_number));
 t6=0:100/10^3:m6*100/10^3-100/10^3;
+
 aux1=m6;
 if aux1<m1
     aux1=m1;
@@ -72,13 +74,14 @@ end
 if aux1<m5
     aux1=m5;
 end
-%aux1 before this line is equal to the number of samples from the vector that took more time to 
+% aux1 before this line is equal to the number of samples from the vector that took more time to 
 % perform the movement. Then for ploting it interest us that all the time
 % axis have the same right limit so we multiply the biggest amount of
 % samples with the period of sampling P=100*10^-3 s;
 aux1=aux1*100*10^-3; 
 
 if printflag % with this we decide if we want to print the data before warping or not
+    figure('Name','Data Warping before DTW');
     title('Data before time warping');
 
     subplot(6,1,1)
@@ -135,9 +138,9 @@ if printflag % with this we decide if we want to print the data before warping o
     grid on;
 end
 
-%% On a first aproach we want to resize data to the smallest Data vector and perform DTW on their 
-% mean. We first select the smallest size from all the vectors size then we resize the rest of the
-% vectors to that size.
+%% On a first aproach we want to resize data to the smallest Data vector and perform DTW on the 
+% resulting mean of all the vectors. We first select the smallest size from all the vectors size 
+% then we resize the rest of the vectors to that size.
 aux=m6;
 if aux>m1
     aux=m1;
@@ -165,10 +168,10 @@ x_axis_time=aux*100*10^-3;
 % Here we calculate the mean vector.
 Vector_mean= (vector1 + vector2 + vector3 + vector4 + vector5 + vector6)/6;
 
-if printflag2 % with this we decide if we want to print the data before warping or not
-   figure('Name','Data after vectors resizing');
+if printflag2 % with this we decide if we want to print the data after resizing the vectors or not
+   figure('Name','Data after vector resizing');
 
-    title('Data after vectors resizing');
+    title('Data after vector resizing');
 
     subplot(7,1,1)
     plot(time,vector1,'r-x')
@@ -249,8 +252,8 @@ pflag=0;
 
 
 [m,n]=size(Vector_mean_w_1);
-T_maior_amostra=n*100/10^3;
-t=0:100/10^3:T_maior_amostra-100/10^3;
+T=n*100/10^3;
+t=0:100/10^3:T-100/10^3;
 figure('Name','Data Warping after DTW');
 title('Data after time warping -  DTW');
 subplot(6,1,1)
@@ -261,8 +264,8 @@ grid on;
 hold on;
 
 [m,n]=size(Vector_mean_w_2);
-T_maior_amostra=n*100/10^3;
-t=0:100/10^3:T_maior_amostra-100/10^3;
+T=n*100/10^3;
+t=0:100/10^3:T-100/10^3;
 subplot(6,1,2)
 
 plot(t,vector2_w,'r-x')
@@ -272,8 +275,8 @@ grid on;
 hold on;
 
 [m,n]=size(Vector_mean_w_3);
-T_maior_amostra=n*100/10^3;
-t=0:100/10^3:T_maior_amostra-100/10^3;
+T=n*100/10^3;
+t=0:100/10^3:T-100/10^3;
 subplot(6,1,3)
 plot(t,vector3_w,'b-*')
 axis on;
@@ -282,8 +285,8 @@ grid on;
 hold on;
 
 [m,n]=size(Vector_mean_w_4);
-T_maior_amostra=n*100/10^3;
-t=0:100/10^3:T_maior_amostra-100/10^3;
+T=n*100/10^3;
+t=0:100/10^3:T-100/10^3;
 subplot(6,1,4)
 
 plot(t,vector4_w,'r-x')
@@ -293,8 +296,8 @@ grid on;
 hold on;
 
 [m,n]=size(Vector_mean_w_5);
-T_maior_amostra=n*100/10^3;
-t=0:100/10^3:T_maior_amostra-100/10^3;
+T=n*100/10^3;
+t=0:100/10^3:T-100/10^3;
 subplot(6,1,5)
 
 plot(t,vector5_w,'b-x')
@@ -304,8 +307,8 @@ grid on;
 hold on;
 
 [m,n]=size(Vector_mean_w_6);
-T_maior_amostra=n*100/10^3;
-t=0:100/10^3:T_maior_amostra-100/10^3;
+T=n*100/10^3;
+t=0:100/10^3:T-100/10^3;
 subplot(6,1,6)
 
 plot(t,vector6_w,'r-x')
