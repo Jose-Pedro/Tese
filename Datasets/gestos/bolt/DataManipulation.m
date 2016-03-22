@@ -531,6 +531,57 @@ if approach==1
     end
 end
 %%
+Data=[t;vector1_pc1_w;vector2_pc1_w;vector3_pc1_w;vector4_pc1_w;vector5_pc1_w;vector6_pc1_w];
+nbStates=4;
+nbVar = size(Data,1);
+
+
+%% Training of GMM by EM algorithm, initialized by k-means clustering.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+[Priors, Mu, Sigma] = EM_init_kmeans(Data, nbStates);
+[Priors, Mu, Sigma] = EM(Data, Priors, Mu, Sigma);
+
+%% Use of GMR to retrieve a generalized version of the data and associated
+%% constraints. A sequence of temporal values is used as input, and the 
+%% expected distribution is retrieved. 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+expData(1,:) = linspace(min(Data(1,:)), max(Data(1,:)), 100);
+[expData(2:nbVar,:), expSigma] = GMR(Priors, Mu, Sigma,  expData(1,:), [1], [2:nbVar]);
+
+
+%% Plot of the GMM encoding results
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%plot 1D
+figure('Name','Plot of the GMM encoding results');
+for n=1:nbVar-1
+  subplot(nbVar-1,1,n)
+  hold on
+  plotGMM(Mu([1,n+1],:), Sigma([1,n+1],[1,n+1],:), [0 .8 0], 1);
+  %axis([min(Data(1,:)) max(Data(1,:)) min(Data(n+1,:))-0.01 max(Data(n+1,:))+0.01]);
+  xlabel('t','fontsize',16); ylabel(['x_' num2str(n)],'fontsize',16);
+end
+
+
+%% Plot of the GMR regression results
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%plot 1D
+figure('Name','Plot of the GMR regression results');
+for n=1:nbVar-1
+  
+  subplot(nbVar-1,1,n)
+  hold on
+  plotGMM(expData([1,n+1],:), expSigma(n,n,:), [0 0 .8], 3);
+  %axis([min(Data(1,:)) max(Data(1,:)) min(Data(n+1,:))-0.01 max(Data(n+1,:))+0.01]);
+  xlabel('t','fontsize',16); ylabel(['x_' num2str(n)],'fontsize',16);
+end
+%plot 2D
+% 
+% figure('Name','Plot of the GMR regression results - all ');
+% plotGMM(expData([2,3,4,5,6,7],:), expSigma([1,2,3,4,5,6],[1,2,3,4,5,6],:), [0 0 .8], 2);
+% axis([min(Data(2,:))-0.01 max(Data(2,:))+0.01 min(Data(3,:))-0.01 max(Data(3,:))+0.01]);
+% xlabel('x_1','fontsize',16); ylabel('x_2','fontsize',16);
+% % pause;
+% % close all;
 
 
 
