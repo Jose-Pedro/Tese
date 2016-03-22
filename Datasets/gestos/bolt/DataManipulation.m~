@@ -6,7 +6,7 @@ clc;
 
 
 %% with this we decide if we what data to plot
-printflag=3;
+printflag=4;
 
 approach=1;
 % with this we decide if we want to print the data after resizing the warped vectors or not
@@ -76,48 +76,12 @@ if (printflag==1 || printflag==0)
         % samples with the period of sampling P=100*10^-3 s;
         aux1=aux1*100*10^-3; 
 
-         % with this we decide if we want to print the data before warping or not
-            figure('Name','Data Warping before DTW');
+                       str = sprintf('Data corresponding to the %i joint from the 6 datasets. ',joint_number);
 
-            plot(t1,Data1(:,joint_number),'r-x')
-            str = sprintf('Data corresponding to the %i joint from the 6 datasets. ',joint_number);
-            title(str);
-
-            axis([0 aux1 -2 2])
-            axis on;
-            ylabel('Data1');
-            xlabel('Time - 100ms each point');
-            grid on;
-
-
-            hold on
-            plot(t2,Data2(:,joint_number),'b-.')
-            
-
-
-            hold on
-            plot(t3,Data3(:,joint_number),'g-+')
-            
-
-
-            hold on
-            plot(t4,Data4(:,joint_number),'c-*')
-            
-   
-
-
-            hold on
-            plot(t5,Data5(:,joint_number),'m-s')
-
-
-            hold on
-            plot(t6,Data6(:,joint_number),'d-k')
-            axis([0 aux1 -2 2])
-            
-            
+            printingFunction(Data1(:,joint_number)',Data2(:,joint_number)',Data3(:,joint_number)',Data4(:,joint_number)',Data5(:,joint_number)',Data6(:,joint_number)','Data Warping before DTW',str,'Joint values','Time - 100ms each point',1,g1,g2,g3,g4,g5,g6);
 
     end
-    clearvars aux1
+    clearvars aux1 t1 t2 t3 t4 t5 t6 m1 m2 m3 m4 m5 m6 n1 n2 n3 n4 n5 n6
 end
 
 
@@ -334,257 +298,17 @@ num_pc6
 %  to reach the 99% and and we use that number of pca for all other
 %  datasets in this case performance3 used 4 p.c. being the max number of
 %  p.c. used among the datasets.
-%% First PC for all the datasets
+number_pc=4;
 
-[m1,n1]=size(pc1(:,1));
-[m2,n2]=size(pc2(:,1));
-[m3,n3]=size(pc3(:,1));
-[m4,n4]=size(pc4(:,1));
-[m5,n5]=size(pc5(:,1));
-[m6,n6]=size(pc6(:,1));
+Data=zeros(7,70);
+GMR_Data=zeros(2,100);
+GMR_Sigma=zeros(1,1,100);
+for i=1:number_pc
+    
+    Data=pcvectorwarping(pc1(:,i),pc2(:,i),pc3(:,i),pc4(:,i),pc5(:,i),pc6(:,i),g1,g2,g3,g4,g5,g6);
 
-% On a first aproach i resized data to the smallest Data vector and performed DTW on the 
-% resulting mean of all the vectors. First i select the smallest size from all the vectors size 
-% then i resized the rest of the vectors to that size.
-
-aux=m6;
-if aux>m1
-    aux=m1;
-elseif aux>m2
-    aux=m2;
-elseif aux>m3
-    aux=m3;
-elseif aux>m4
-    aux=m4;
-elseif aux>m5
-    aux=m5;
+    [GMR_Data , GMR_Sigma]=GMM_Result(Data,6,0);
 end
-
-% Here we use the function Resizer so we resize all the vectors to the
-% smallest one
-vector1_pc1=Resizer(pc1(:,1)',aux,m1);
-vector2_pc1=Resizer(pc2(:,1)',aux,m2);
-vector3_pc1=Resizer(pc3(:,1)',aux,m3);
-vector4_pc1=Resizer(pc4(:,1)',aux,m4);
-vector5_pc1=Resizer(pc5(:,1)',aux,m5);
-vector6_pc1=Resizer(pc6(:,1)',aux,m6);
-clearvars aux
-% Here we calculate the mean vector.
-Vector_mean_pc1= (vector1_pc1 + vector2_pc1 + vector3_pc1 + vector4_pc1 + vector5_pc1 + vector6_pc1)/6;
-
-% We use the function created by  Pau Micó to perform dtw and retrieve the warped vectors
-% Link: http://www.mathworks.com/matlabcentral/fileexchange/16350-continuous-dynamic-time-warping
-
-
-[dtw_Dist1,D1,dtw_k1,w1,vector1_pc1_w,Vector_mean_w_1]=dtw(vector1_pc1,Vector_mean_pc1,0);
-[dtw_Dist2,D2,dtw_k2,w2,vector2_pc1_w,Vector_mean_w_2]=dtw(vector2_pc1,Vector_mean_pc1,0);
-[dtw_Dist3,D3,dtw_k3,w3,vector3_pc1_w,Vector_mean_w_3]=dtw(vector3_pc1,Vector_mean_pc1,0);
-[dtw_Dist4,D4,dtw_k4,w4,vector4_pc1_w,Vector_mean_w_4]=dtw(vector4_pc1,Vector_mean_pc1,0);
-[dtw_Dist5,D5,dtw_k5,w5,vector5_pc1_w,Vector_mean_w_5]=dtw(vector5_pc1,Vector_mean_pc1,0);
-[dtw_Dist6,D6,dtw_k6,w6,vector6_pc1_w,Vector_mean_w_6]=dtw(vector6_pc1,Vector_mean_pc1,0);
-
-if (printflag==2 || printflag==0) % with this we decide if we want to print the data after warping the vectors or not
-    
-    figure('Name','Data Warping after PCA AND DTW');
-    
-    
-    [m,n]=size(vector1_pc1_w);
-    T=n*100/10^3;
-    t=0:100/10^3:T-100/10^3;
-    
-    h(1)=plot(t,vector1_pc1_w,'b-*');
-    title('Data after time warping and principal component analysis');
-    axis on;
-    ylabel('First Principal Component')
-    xlabel('Time - 100ms each point');
-    grid on;
-    hold on;
-
-    [m,n]=size(vector2_pc1_w);
-    T=n*100/10^3;
-    t=0:100/10^3:T-100/10^3;
-    hold on
-    h(2)=plot(t,vector2_pc1_w,'r-x');
-    hold on;
-
-    [m,n]=size(vector3_pc1_w);
-    T=n*100/10^3;
-    t=0:100/10^3:T-100/10^3;
-    hold on
-    h(3)=plot(t,vector3_pc1_w,'m-.');
-    hold on;
-
-    [m,n]=size(vector4_pc1_w);
-    T=n*100/10^3;
-    t=0:100/10^3:T-100/10^3;
-    hold on
-
-    h(4)=plot(t,vector4_pc1_w,'g-o');
-    hold on;
-
-    [m,n]=size(vector5_pc1_w);
-    T=n*100/10^3;
-    t=0:100/10^3:T-100/10^3;
-    hold on
-
-    h(5)=plot(t,vector5_pc1_w,'c-+');
-    hold on;
-
-    [m,n]=size(vector6_pc1_w);
-    T=n*100/10^3;
-    t=0:100/10^3:T-100/10^3;
-    hold on
-
-    h(6)=plot(t,vector6_pc1_w,'k-s');
-    legend(h, g1, g2, g3, g4, g5, g6);
-    
-end
-
-% In a first approach after vectors warping i decided to resize them again to the size of smallest
-% sized vector  again
-
-
-if approach==1
-        [m1,n]=size(vector1_pc1_w');
-        [m2,n]=size(vector2_pc1_w');
-        [m3,n]=size(vector3_pc1_w');
-        [m4,n]=size(vector4_pc1_w');
-        [m5,n]=size(vector5_pc1_w');
-        [m6,n]=size(vector6_pc1_w');
-        
-        aux=m6;
-        if aux>m1
-            aux=m1;
-        elseif aux>m2
-            aux=m2;
-        elseif aux>m3
-            aux=m3;
-        elseif aux>m4
-            aux=m4;
-        elseif aux>m5
-            aux=m5;
-        end
-
-        vector1_pc1_w=Resizer(vector1_pc1_w,aux,m1);
-        vector2_pc1_w=Resizer(vector2_pc1_w,aux,m2);
-        vector3_pc1_w=Resizer(vector3_pc1_w,aux,m3);
-        vector4_pc1_w=Resizer(vector4_pc1_w,aux,m4);
-        vector5_pc1_w=Resizer(vector5_pc1_w,aux,m5);
-        vector6_pc1_w=Resizer(vector6_pc1_w,aux,m6);
-
-    
-    if (printflag==3 || printflag==0) % with this we decide if we want to print the data after warping the vectors or not
-    
-        figure('Name','Data Warping after DTW, PCA and Resize');
-
-
-        [m,n]=size(vector1_pc1_w);
-        T=n*100/10^3;
-        t=0:100/10^3:T-100/10^3;
-
-        j(1)=plot(t,vector1_pc1_w,'b-*');
-        title('Data after time warping, pca and resizing in the end');
-        axis on;
-        ylabel('First Principal Component')
-        xlabel('Time - 100ms each point');
-        grid on;
-        hold on;
-
-        [m,n]=size(vector2_pc1_w);
-        T=n*100/10^3;
-        t=0:100/10^3:T-100/10^3;
-        hold on
-        j(2)=plot(t,vector2_pc1_w,'r-x');
-        hold on;
-
-        [m,n]=size(vector3_pc1_w);
-        T=n*100/10^3;
-        t=0:100/10^3:T-100/10^3;
-        hold on
-        j(3)=plot(t,vector3_pc1_w,'m-.');
-        hold on;
-
-        [m,n]=size(vector4_pc1_w);
-        T=n*100/10^3;
-        t=0:100/10^3:T-100/10^3;
-        hold on
-
-        j(4)=plot(t,vector4_pc1_w,'g-o');
-        hold on;
-
-        [m,n]=size(vector5_pc1_w);
-        T=n*100/10^3;
-        t=0:100/10^3:T-100/10^3;
-        hold on
-
-        j(5)=plot(t,vector5_pc1_w,'c-+');
-        hold on;
-
-        [m,n]=size(vector6_pc1_w);
-        T=n*100/10^3;
-        t=0:100/10^3:T-100/10^3;
-        hold on
-
-        j(6)=plot(t,vector6_pc1_w,'k-s');
-        legend(j, g1, g2, g3, g4, g5, g6);
-
-    end
-end
-%%
-Data=[t;vector1_pc1_w;vector2_pc1_w;vector3_pc1_w;vector4_pc1_w;vector5_pc1_w;vector6_pc1_w];
-nbStates=4;
-nbVar = size(Data,1);
-
-
-%% Training of GMM by EM algorithm, initialized by k-means clustering.
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-[Priors, Mu, Sigma] = EM_init_kmeans(Data, nbStates);
-[Priors, Mu, Sigma] = EM(Data, Priors, Mu, Sigma);
-
-%% Use of GMR to retrieve a generalized version of the data and associated
-%% constraints. A sequence of temporal values is used as input, and the 
-%% expected distribution is retrieved. 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-expData(1,:) = linspace(min(Data(1,:)), max(Data(1,:)), 100);
-[expData(2:nbVar,:), expSigma] = GMR(Priors, Mu, Sigma,  expData(1,:), [1:6], [2:nbVar]);
-
-
-
-%% Plot of the GMM encoding results
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%plot 1D
-figure('Name','Plot of the GMM encoding results');
-for n=1:nbVar-1
-  subplot(nbVar-1,1,n)
-  hold on
-  plotGMM(Mu([1,n+1],:), Sigma([1,n+1],[1,n+1],:), [0 .8 0], 1);
-  %axis([min(Data(1,:)) max(Data(1,:)) min(Data(n+1,:))-0.01 max(Data(n+1,:))+0.01]);
-  xlabel('t','fontsize',16); ylabel(['x_' num2str(n)],'fontsize',16);
-end
-
-
-%% Plot of the GMR regression results
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%plot 1D
-figure('Name','Plot of the GMR regression results');
-for n=1:nbVar-1
-  
-  subplot(nbVar-1,1,n)
-  hold on
-  plotGMM(expData([1,n+1],:), expSigma(n,n,:), [0 0 .8], 3);
-  %axis([min(Data(1,:)) max(Data(1,:)) min(Data(n+1,:))-0.01 max(Data(n+1,:))+0.01]);
-  xlabel('t','fontsize',16); ylabel(['x_' num2str(n)],'fontsize',16);
-end
-%plot 2D
-% 
-% figure('Name','Plot of the GMR regression results - all ');
-% plotGMM(expData([2,3,4,5,6,7],:), expSigma([1,2,3,4,5,6],[1,2,3,4,5,6],:), [0 0 .8], 2);
-% axis([min(Data(2,:))-0.01 max(Data(2,:))+0.01 min(Data(3,:))-0.01 max(Data(3,:))+0.01]);
-% xlabel('x_1','fontsize',16); ylabel('x_2','fontsize',16);
-% % pause;
-% % close all;
-
-
 
 
 

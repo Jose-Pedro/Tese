@@ -1,0 +1,56 @@
+function printingFunction(vector1,vector2,vector3,vector4,vector5,vector6,fig_name,title_name,legend_name,print_legend,g1,g2,g3,g4,g5,g6)
+
+
+figure('Name','Data Warping after PCA AND DTW');
+    
+    
+    [m,n]=size(vector1);
+    T=n*100/10^3;
+    t=0:100/10^3:T-100/10^3;
+    
+    h(1)=plot(t,vector1,'b-*');
+    title('Data after time warping and principal component analysis');
+    axis on;
+    ylabel('First Principal Component')
+    xlabel('Time - 100ms each point');
+    grid on;
+    hold on;
+
+    [m,n]=size(vector2);
+    T=n*100/10^3;
+    t=0:100/10^3:T-100/10^3;
+    hold on
+    h(2)=plot(t,vector2,'r-x');
+    hold on;
+
+    [m,n]=size(vector3);
+    T=n*100/10^3;
+    t=0:100/10^3:T-100/10^3;
+    hold on
+    h(3)=plot(t,vector3,'m-.');
+    hold on;
+
+    [m,n]=size(vector4);
+    T=n*100/10^3;
+    t=0:100/10^3:T-100/10^3;
+    hold on
+
+    h(4)=plot(t,vector1,'g-o');
+    hold on;
+
+    [m,n]=size(vector5_pc1_w);
+    T=n*100/10^3;
+    t=0:100/10^3:T-100/10^3;
+    hold on
+
+    h(5)=plot(t,vector5_pc1_w,'c-+');
+    hold on;
+
+    [m,n]=size(vector6_pc1_w);
+    T=n*100/10^3;
+    t=0:100/10^3:T-100/10^3;
+    hold on
+
+    h(6)=plot(t,vector6_pc1_w,'k-s');
+    legend(h, g1, g2, g3, g4, g5, g6);
+    

@@ -61,11 +61,14 @@ expData(1,:) = linspace(min(Data(1,:)), max(Data(1,:)), 100);
 
 %% Plot of the data
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+figure;
+plot(Data(1,:), Data(2+1,:));
 figure('position',[10,10,1000,800],'name','GMM-GMR-demo1');
 %plot 1D
 for n=1:nbVar-1
   subplot(3*(nbVar-1),2,(n-1)*2+1); hold on;
   plot(Data(1,:), Data(n+1,:), 'x', 'markerSize', 4, 'color', [.3 .3 .3]);
+  legend(['n_' num2str(n)]);
   axis([min(Data(1,:)) max(Data(1,:)) min(Data(n+1,:))-0.01 max(Data(n+1,:))+0.01]);
   xlabel('t','fontsize',16); ylabel(['x_' num2str(n)],'fontsize',16);
 end
@@ -79,10 +82,11 @@ xlabel('x_1','fontsize',16); ylabel('x_2','fontsize',16);
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %plot 1D
 for n=1:nbVar-1
+  
   subplot(3*(nbVar-1),2,4+(n-1)*2+1); hold on;
   plotGMM(Mu([1,n+1],:), Sigma([1,n+1],[1,n+1],:), [0 .8 0], 1);
   axis([min(Data(1,:)) max(Data(1,:)) min(Data(n+1,:))-0.01 max(Data(n+1,:))+0.01]);
-  xlabel('t','fontsize',16); ylabel(['x_' num2str(n)],'fontsize',16);
+  xlabel('t1','fontsize',16); ylabel(['x_' num2str(n)],'fontsize',16);
 end
 %plot 2D
 subplot(3*(nbVar-1),2,4+[2:2:2*(nbVar-1)]); hold on;
@@ -106,4 +110,4 @@ axis([min(Data(2,:))-0.01 max(Data(2,:))+0.01 min(Data(3,:))-0.01 max(Data(3,:))
 xlabel('x_1','fontsize',16); ylabel('x_2','fontsize',16);
 
 pause;
-close all;
+
