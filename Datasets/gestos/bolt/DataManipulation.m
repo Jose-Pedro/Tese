@@ -96,8 +96,6 @@ disp(g1);
 % The mean is always subtracted prior to performing PCA. Therefore to get 
 % the original data we do
 mu1 = mean(Data1);
-xhat1 = bsxfun(@minus,Data1,mu1); % subtract the mean
-norm(pc1 * w1' - xhat1);
 % Because w is orthogonal, you also have Xhat * w = pc, 
 % or schematically   (Data1 - mean) * w = pc     <=>      Data1 = mean1 + pc1 * w1'
 Relevance1=ev1/sum(ev1)*100;
@@ -130,8 +128,6 @@ disp(g2);
 % The mean is always subtracted prior to performing PCA. Therefore to get 
 % the original data we do
 mu2 = mean(Data2);
-xhat2 = bsxfun(@minus,Data2,mu2); % subtract the mean
-norm(pc2 * w2' - xhat2);
 % Because w is orthogonal, you also have Xhat * w = pc, 
 % or schematically   (Data2 - mean) * w = pc     <=>      Data2 = mean2 + pc2 * w2'
 Relevance2=ev2/sum(ev2)*100;
@@ -164,8 +160,7 @@ disp(g3);
 % The mean is always subtracted prior to performing PCA. Therefore to get 
 % the original data we do
 mu3 = mean(Data3);
-xhat3 = bsxfun(@minus,Data3,mu3); % subtract the mean
-norm(pc3 * w3' - xhat3);
+
 % Because w is orthogonal, you also have Xhat * w = pc, 
 % or schematically   (Data3 - mean) * w = pc     <=>      Data3 = mean3 + pc3 * w3'
 Relevance3=ev3/sum(ev3)*100;
@@ -199,8 +194,6 @@ disp(g4);
 % The mean is always subtracted prior to performing PCA. Therefore to get 
 % the original data we do
 mu4 = mean(Data4);
-xhat4 = bsxfun(@minus,Data4,mu4); % subtract the mean
-norm(pc4 * w4' - xhat4);
 % Because w is orthogonal, you also have Xhat * w = pc, 
 % or schematically   (Data4 - mean) * w = pc     <=>      Data4 = mean4 + pc4 * w4'
 Relevance4=ev4/sum(ev4)*100;
@@ -236,8 +229,6 @@ disp(g5);
 % The mean is always subtracted prior to performing PCA. Therefore to get 
 % the original data we do
 mu5 = mean(Data5);
-xhat5 = bsxfun(@minus,Data5,mu5); % subtract the mean
-norm(pc5 * w5' - xhat5);
 % Because w is orthogonal, you also have Xhat * w = pc, 
 % or schematically   (Data5 - mean) * w = pc     <=>      Data5 = mean5 + pc5 * w5'
 Relevance5=ev5/sum(ev5)*100;
@@ -270,8 +261,6 @@ disp(g6);
 % The mean is always subtracted prior to performing PCA. Therefore to get 
 % the original data we do
 mu6 = mean(Data6);
-xhat6 = bsxfun(@minus,Data6,mu6); % subtract the mean
-norm(pc6 * w6' - xhat6);
 % Because w is orthogonal, you also have Xhat * w = pc, 
 % or schematically   (Data6 - mean) * w = pc     <=>      Data6 = mean6 + pc6 * w6'
 Relevance6=ev6/sum(ev6)*100;
@@ -298,7 +287,7 @@ num_pc6
 %  to reach the 99% and and we use that number of pca for all other
 %  datasets in this case performance3 used 4 p.c. being the max number of
 %  p.c. used among the datasets.
-number_pc=7;
+number_pc=4;
 
 Data=zeros(7,70);
 GMR_Data=zeros(4,2,100);
@@ -307,7 +296,7 @@ for i=1:number_pc
     
     Data=pcvectorwarping(pc1(:,i),pc2(:,i),pc3(:,i),pc4(:,i),pc5(:,i),pc6(:,i),g1,g2,g3,g4,g5,g6,i,0);
 
-    [GMR_Data(i,:,:) , GMR_Sigma(i,1,1,:)]=GMM_Result(Data,6,0);
+    [GMR_Data(i,:,:) , GMR_Sigma(i,1,1,:)]=GMM_Result(Data,6,1);
 end
 
 Signature_mean=(mu1+mu2+mu3+mu4+mu5+mu6)/6;
@@ -321,10 +310,10 @@ plot(aux(1,:),PC_Signature(:,1));
 % To get an approximation to the original data, we can start dropping 
 % columns from the computed principal components. To get an idea of which
 % columns to drop, we examine the ev variable
-Xapprox = PC_Signature* Signature_w(:,1:number_pc)';
+Xapprox = PC_Signature(:,1:number_pc)* Signature_w(:,1:number_pc)';
 Xapprox = bsxfun(@plus,Signature_mean,Xapprox); % add the mean back in
 figure;
-plot(Xapprox(:,1),'*b'); hold on; plot(Data4(:,1),'.r')
+plot(Xapprox(:,3),'*b'); hold on; plot(Data6(:,3),'.r')
 
 xlabel('Approximation - blue '); ylabel('Actual value -  red'); grid on;
 
