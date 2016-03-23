@@ -298,7 +298,7 @@ num_pc6
 %  to reach the 99% and and we use that number of pca for all other
 %  datasets in this case performance3 used 4 p.c. being the max number of
 %  p.c. used among the datasets.
-number_pc=4;
+number_pc=7;
 
 Data=zeros(7,70);
 GMR_Data=zeros(4,2,100);
@@ -310,17 +310,22 @@ for i=1:number_pc
     [GMR_Data(i,:,:) , GMR_Sigma(i,1,1,:)]=GMM_Result(Data,6,0);
 end
 
+Signature_mean=(mu1+mu2+mu3+mu4+mu5+mu6)/6;
+Signature_w=(w1+w2+w3+w4+w5+w6)/6;
+a=GMR_Data(1:number_pc,2,:) ;
+PC_Signature=a(:,:);
+PC_Signature=PC_Signature';
+a2=GMR_Data(1:number_pc,1,:) ;
+aux=a2(:,:);
+plot(aux(1,:),PC_Signature(:,1));
+% To get an approximation to the original data, we can start dropping 
+% columns from the computed principal components. To get an idea of which
+% columns to drop, we examine the ev variable
+Xapprox = PC_Signature* Signature_w(:,1:number_pc)';
+Xapprox = bsxfun(@plus,Signature_mean,Xapprox); % add the mean back in
+figure;
+plot(Xapprox(:,1),'*b'); hold on; plot(Data4(:,1),'.r')
 
-
-
-%% % To get an approximation to the original data, we can start dropping 
-% % columns from the computed principal components. To get an idea of which
-% % columns to drop, we examine the ev variable
-% Xapprox = pc1(:,1:num_pc1) * w1(:,1:num_pc1)';
-% Xapprox = bsxfun(@plus,mu1,Xapprox); % add the mean back in
-% figure;
-% plot(Xapprox(:,2),'*b'); hold on; plot(Data1(:,2),'.r')
-% 
-% xlabel('Approximation - blue '); ylabel('Actual value -  red'); grid on;
+xlabel('Approximation - blue '); ylabel('Actual value -  red'); grid on;
 
 

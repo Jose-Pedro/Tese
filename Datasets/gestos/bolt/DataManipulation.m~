@@ -301,26 +301,30 @@ num_pc6
 number_pc=4;
 
 Data=zeros(7,70);
-GMR_Data=zeros(2,100);
-GMR_Sigma=zeros(1,1,100);
+GMR_Data=zeros(4,2,100);
+GMR_Sigma=zeros(4,1,1,100);
 for i=1:number_pc
     
-    Data=pcvectorwarping(pc1(:,i),pc2(:,i),pc3(:,i),pc4(:,i),pc5(:,i),pc6(:,i),g1,g2,g3,g4,g5,g6);
+    Data=pcvectorwarping(pc1(:,i),pc2(:,i),pc3(:,i),pc4(:,i),pc5(:,i),pc6(:,i),g1,g2,g3,g4,g5,g6,i,0);
 
-    [GMR_Data , GMR_Sigma]=GMM_Result(Data,6,0);
+    [GMR_Data(i,:,:) , GMR_Sigma(i,1,1,:)]=GMM_Result(Data,6,0);
 end
 
-
-
-
-%% % To get an approximation to the original data, we can start dropping 
-% % columns from the computed principal components. To get an idea of which
-% % columns to drop, we examine the ev variable
-% Xapprox = pc1(:,1:num_pc1) * w1(:,1:num_pc1)';
-% Xapprox = bsxfun(@plus,mu1,Xapprox); % add the mean back in
+PC_Signature=reshape(GMR_Data(:,2,:),[],5,1);
+Signature_mean=(mu1+mu2+mu3+mu4+mu5+mu6)/6;
+Signature_w=(w1+w2+w3+w4+w5+w6)/6;
+a=GMR_Data(1:number_pc,2,:) ;
+PC_Signature=a(:,:);
+a2=GMR_Data(1:number_pc,1,:) ;
+plot(a2,a);
+% % To get an approximation to the original data, we can start dropping 
+% columns from the computed principal components. To get an idea of which
+% columns to drop, we examine the ev variable
+% Xapprox = GMR_Data(1:number_pc,2,:) .* Signature_w(:,1:number_pc)';
+% Xapprox = bsxfun(@plus,Signature_mean,Xapprox); % add the mean back in
 % figure;
 % plot(Xapprox(:,2),'*b'); hold on; plot(Data1(:,2),'.r')
 % 
 % xlabel('Approximation - blue '); ylabel('Actual value -  red'); grid on;
-
+% 
 
