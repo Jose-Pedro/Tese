@@ -33,7 +33,7 @@ if printflag
     %plot 1D
     figure('Name','Plot of the GMM encoding results (left) and GMR regression (right)');
     for n=1:nbVar-1
-      subplot(nbVar-1,2,(2*n-1))
+      subplot(nbVar,2,(2*n-1))
       hold on
       plotGMM(Mu([1,n+1],:), Sigma([1,n+1],[1,n+1],:), [0 .8 0], 1);
       %axis([min(Data(1,:)) max(Data(1,:)) min(Data(n+1,:))-0.01 max(Data(n+1,:))+0.01]);
@@ -46,7 +46,7 @@ if printflag
     %plot 1D
     for n=1:nbVar-1
 
-      subplot(nbVar-1,2,2*n)
+      subplot(nbVar,2,2*n)
       hold on
       plotGMM(expData([1,n+1],:), expSigma(n,n,:), [0 0 .8], 3);
       %axis([min(Data(1,:)) max(Data(1,:)) min(Data(n+1,:))-0.01 max(Data(n+1,:))+0.01]);
@@ -72,6 +72,7 @@ for n=1:nbVar-1
     end
 end
 if printflag
-    figure('Name','Plot of the GMR regression concatenated');
+    subplot(nbVar,2,(2*n+1):(2*n+2))
+    %figure('Name','Plot of the GMR regression concatenated');
     plotGMM(GMR_Data([1,2],:), GMR_Sigma(1,1,:), [0 0 .8], 3);
 end
