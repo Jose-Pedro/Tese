@@ -1,4 +1,4 @@
-function printingFunction(vector1,vector2,vector3,vector4,vector5,vector6,fig_name,title_name,x_label,y_label,print_legend,g1,g2,g3,g4,g5,g6)
+function printingFunction(x_max_size,vector1,vector2,vector3,vector4,vector5,vector6,fig_name,title_name,x_label,y_label,print_legend,g1,g2,g3,g4,g5,g6)
 
 
 figure('Name',fig_name);
@@ -52,6 +52,7 @@ figure('Name',fig_name);
     hold on
 
     h(6)=plot(t,vector6,'k-s');
+    axis ([0 x_max_size -2 2]);
     if(print_legend)
         legend(h, g1, g2, g3, g4, g5, g6);
     end

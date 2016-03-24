@@ -33,7 +33,7 @@ vector3_pc=Resizer(pc3',aux,m3);
 vector4_pc=Resizer(pc4',aux,m4);
 vector5_pc=Resizer(pc5',aux,m5);
 vector6_pc=Resizer(pc6',aux,m6);
-clearvars aux
+
 % Here we calculate the mean vector.
 Vector_mean_pc= (vector1_pc + vector2_pc + vector3_pc + vector4_pc + vector5_pc + vector6_pc)/6;
 
@@ -52,9 +52,9 @@ Vector_mean_pc= (vector1_pc + vector2_pc + vector3_pc + vector4_pc + vector5_pc 
 % vectors or not(if not just comment this line)
  str = sprintf(' %i Principal component. ',i);
 if printflag
-    printingFunction(vector1_pc_w,vector2_pc_w,vector3_pc_w,vector4_pc_w,vector5_pc_w,vector6_pc_w,'Data Warping after PCA AND DTW','Data after time warping and principal component analysis',str,'Time - 100ms each point',1,g1,g2,g3,g4,g5,g6);
+    printingFunction(aux*100/10^3,vector1_pc_w,vector2_pc_w,vector3_pc_w,vector4_pc_w,vector5_pc_w,vector6_pc_w,'Data Warping after PCA AND DTW','Data after principal component analysis and time warping ',str,'Time - 100ms each point',1,g1,g2,g3,g4,g5,g6);
 end
-
+clearvars aux
 % In a first approach after vectors warping i decided to resize them again to the size of smallest
 % sized vector .
 approach=1;
@@ -93,7 +93,7 @@ if approach==1
 % vector or not(if not just comment this line)
 if printflag
     
-    printingFunction(vector1_pc_w,vector2_pc_w,vector3_pc_w,vector4_pc_w,vector5_pc_w,vector6_pc_w,'Data Warping after DTW, PCA and Resize','Data after time warping, pca and resizing in the end',str,'Time - 100ms each point',1,g1,g2,g3,g4,g5,g6);
+    printingFunction(T,vector1_pc_w,vector2_pc_w,vector3_pc_w,vector4_pc_w,vector5_pc_w,vector6_pc_w,'Data Warping after PCA, DTW and Resize','Data after  pca, time warping and resizing in the end',str,'Time - 100ms each point',1,g1,g2,g3,g4,g5,g6);
 end
   
 end
