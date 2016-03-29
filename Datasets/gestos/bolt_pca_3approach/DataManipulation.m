@@ -5,7 +5,7 @@ clc;
 
 
 %% with this we decide if we what data to plot
-printflag=0;
+printflag=5;
 
 approach=1;
 % with this we decide if we want to print the data after resizing the warped vectors or not
@@ -296,7 +296,7 @@ for i=1:number_pc
     
     Data=pcvectorwarping(pc1(:,i),pc2(:,i),pc3(:,i),pc4(:,i),pc5(:,i),pc6(:,i),g1,g2,g3,g4,g5,g6,i,0);
 
-    [GMR_Data(i,:,:) , GMR_Sigma(i,1,1,:)]=GMM_Result(i,Data,6,1);
+    [GMR_Data(i,:,:) , GMR_Sigma(i,1,1,:)]=GMM_Result(i,Data,5,1);
 end
 
 Signature_mean=(mu1+mu2+mu3+mu4+mu5+mu6)/6;
@@ -312,14 +312,14 @@ aux=a2(:,:);
 % columns to drop, we examine the ev variable
 Xapprox = PC_Signature(:,1:number_pc)* Signature_w(:,1:number_pc)';
 Xapprox = bsxfun(@plus,Signature_mean,Xapprox); % add the mean back in
-joint=2;
+joint=1;
 
 
 
         
 
      
-figure('Name','Original Datasets and final signature.');
+figure('Name','Original Datasets and final signature. Before resizing');
 h(1)=plot(Xapprox(:,joint),'^-b'); 
 title(['Original Datasets and final signature from the joint number  ' num2str(joint)],'fontsize',16)
 hold on;
@@ -336,19 +336,28 @@ hold on;
 h(7)=plot(Data6(:,joint),'k-s');
 hold on; 
 grid on
+ylabel('joiint values');
+xlabel('Time - 1ms each point. ');
 legend(h,'Signature', g1, g2, g3, g4, g5, g6);
 
         
-        =Xapprox(:,joint);
+        vectors=Xapprox(:,joint);
+        vector1=Data1(:,joint);
+        vector2=Data2(:,joint);
+        vector3=Data3(:,joint);
+        vector4=Data4(:,joint);
+        vector5=Data5(:,joint);
+        vector6=Data6(:,joint);
+        
+        
 
-
-        [m1,n]=size(vector1');
-        [m2,n]=size(vector2');
-        [m3,n]=size(vector3');
-        [m4,n]=size(vector4');
-        [m5,n]=size(vector5');
-        [m6,n]=size(vector6');
-        [m7,n]=size(vectors');
+        [m1,n]=size(vector1);
+        [m2,n]=size(vector2);
+        [m3,n]=size(vector3);
+        [m4,n]=size(vector4);
+        [m5,n]=size(vector5);
+        [m6,n]=size(vector6);
+        [m7,n]=size(vectors);
         
         aux=m7;
         if aux>m1
@@ -371,12 +380,32 @@ legend(h,'Signature', g1, g2, g3, g4, g5, g6);
         vector4=Resizer(vector4,aux,m4);
         vector5=Resizer(vector5,aux,m5);
         vector6=Resizer(vector6,aux,m6);
-        vectors=Resizer(vectors,aux,m6);
-        [m,n]=size(vector1_pc_w);% Here we define the temporal constraint
-        T=n*100/10^3;
+        vectors=Resizer(vectors,aux,m7);
+        [m,n]=size(vector1);% Here we define the temporal constraint
+        T=m*100/10^3;
         t=0:100/10^3:T-100/10^3;
 
-
+figure('Name','Original Datasets and final signature. After resizing');
+h(1)=plot(t,vectors,'^-b'); 
+title(['Original Datasets and final signature (resized) from the joint number  ' num2str(joint)],'fontsize',16)
+hold on;
+h(2) = plot(t,vector1,'y-*');
+hold on
+h(3)=plot(t,vector2,'r-x');
+hold on; 
+h(4)=plot(t,vector3,'m-.');
+hold on; 
+h(5)=plot(t,vector4,'g-o');
+hold on; 
+h(6)=plot(t,vector5,'c-+');
+hold on; 
+h(7)=plot(t,vector6,'k-s');
+hold on; 
+grid on
+ylabel('joiint values');
+xlabel('Time - 100ms each point. ');
+axis ([0 aux/10 -2.5 2.5]);
+legend(h,'Signature', g1, g2, g3, g4, g5, g6);
 
 
 
