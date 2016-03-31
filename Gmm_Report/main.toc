@@ -1,10 +1,4 @@
-\contentsline {section}{\numberline {1}C\IeC {\'a}lculo do Fluxo \IeC {\'O}ptico}{3}{section.1}
-\contentsline {section}{\numberline {2}Trabalho Pr\IeC {\'a}ctico}{4}{section.2}
-\contentsline {subsection}{\numberline {2.1}Movimento de 1 Pixel}{4}{subsection.2.1}
-\contentsline {subsubsection}{\numberline {2.1.1}Modelo Constante - Janela 5x5}{4}{subsubsection.2.1.1}
-\contentsline {subsubsection}{\numberline {2.1.2}Modelo Afim - Janela 5x5}{6}{subsubsection.2.1.2}
-\contentsline {subsection}{\numberline {2.2}Movimento de 5 Pixeis}{8}{subsection.2.2}
-\contentsline {subsubsection}{\numberline {2.2.1}Modelo Constante - Janela 8x8}{8}{subsubsection.2.2.1}
-\contentsline {subsubsection}{\numberline {2.2.2}Modelo Constante - Janela 12x12}{9}{subsubsection.2.2.2}
-\contentsline {subsubsection}{\numberline {2.2.3}Modelo Afim - Janela 8x8}{10}{subsubsection.2.2.3}
-\contentsline {subsubsection}{\numberline {2.2.4}Modelo Afim - Janela 12x12}{11}{subsubsection.2.2.4}
+\contentsline {section}{\numberline {1}Introduction}{2}{section.1}
+\contentsline {section}{\numberline {2}Algorithms}{2}{section.2}
+\contentsline {section}{\numberline {3}Approach}{2}{section.3}
+\contentsline {section}{\numberline {4}Conclusion and Future Work}{2}{section.4}

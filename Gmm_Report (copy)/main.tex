@@ -123,7 +123,10 @@
 
 %rename defaults
 
-
+\renewcommand{\figurename}{Figura}
+\renewcommand{\contentsname}{Tabela de conteúdos}
+\renewcommand{\abstractname}{Introdução}
+\renewcommand{\refname}{Referências}
 
 
 %Figure side by side
@@ -218,20 +221,21 @@
 \newcommand{\MYnumber}{2010129934} 
 
 
+
 %\newcommand{\MYauthorIII}{------ ----- ----} 
 %\newcommand{\MYnumberIII}{xxxxxxxxxx}
 
 
 
 % % Titles:
-\newcommand{\MYtitle}{Movement Generalization and Classification}
-\newcommand{\MYsubtitle}{Kinesthetic Learning} % Can be empty
+\newcommand{\MYtitle}{Teste Prático}
+\newcommand{\MYsubtitle}{31/03/2016} % Can be empty
 
 
 % % Course
 
-\newcommand{\MYcoursename}{Learning by Demonstration applied to NAO Robot }
-\newcommand{\MYcourseyear}{ 2015-2016 }
+\newcommand{\MYcoursename}{Projecto Controlo Digital}
+\newcommand{\MYcourseyear}{2015/2016}
 
 
 % % PDF infos
@@ -310,43 +314,28 @@ Departamento de Engenharia Electrotécnica e de Computadores}
 
 \setlength{\parskip}{10pt}
 % Introdução
- \begin{abstract} % (optional)
  
-This report explains the three approaches that i took in order to generalize NAO movements.
-I based my approaches on the article [1] from S. Calinon and F. Guenter and A. Billard . The
-dataset used consisted on Data collected the data from the 12 joints from NAO arms (6 joints
-corresponding to the left arm and 6 joints corresponding to the right arm). Me and my colleague
-Rui Almeida collected Data reproducing the same movement on a total of 6 repetitions of the
-movement, 3 from each one.
-On the first approach i applied Principal Component Analysis (PCA) to the Dataset, after i
-aligned the data using the Dynamic Time Warping (DTW), this are two pre-processing steps
-used to improve the Gaussian Mixture Model (GMM) algorithm that was applied to the resulting
-data, next and finally after this classification we obtain a "signature" using the Gaussian Mixture
-Regression(GMR).
-In a second approach (GMM) and (GMR) were applied directly to the original data.
-In the third and last approach the first steps are equal to the first approach but instead of
-concatenating the data, "signatures" were created for each repetition of the movement and in
-the end it was generated a mean from all the signatures that was used.
- 
- \begin{figure}[ht]
+
+
+
+\begin{figure}[ht]
 \centering
-\includegraphics[width=70mm,scale=1]{1.jpg}
-\caption{Imagem original}\label{fig:Nao}
+\includegraphics[width=170mm,scale=1]{1.png}
+\caption{Observador de estado aplicado aos Blocos do Motor DC e Engrenagens, O terceiro estado do observador preditor, estima a perturbação na entrada.}\label{fig:img}
 \end{figure}
- \end{abstract}
+
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=170mm,scale=1]{2.png}
+\caption{Gráfico do sinal de perturbação e da estimação da perturbação do observador preditor.}\label{fig:img}
+\end{figure}
 
 
 
 
 
 
-
-\tableofcontents
-
-\section{Introduction}
-\section{Algorithms}
-\section{Approach}
-\section{Conclusion and Future Work}
 
 
 \end{document}
