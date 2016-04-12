@@ -296,7 +296,7 @@ for i=1:number_pc
     
     Data=pcvectorwarping(pc1(:,i),pc2(:,i),pc3(:,i),pc4(:,i),pc5(:,i),pc6(:,i),g1,g2,g3,g4,g5,g6,i,0);
 
-    [GMR_Data(i,:,:) , GMR_Sigma(i,1,1,:)]=GMM_Result(i,Data,10,1);
+    [GMR_Data(i,:,:) , GMR_Sigma(i,1,1,:)]=GMM_Result(i,Data,6,1);
 end
 
 Signature_mean=(mu1+mu2+mu3+mu4+mu5+mu6)/6;
@@ -311,7 +311,7 @@ aux=a2(:,:);
 % columns from the computed principal components. To get an idea of which
 % columns to drop, we examine the ev variable
 Xapprox = PC_Signature(:,1:number_pc)* Signature_w(:,1:number_pc)';
-Xapprox = bsxfun(@plus,Signature_mean,Xapprox); % add the mean back in
+Xapprox = bsxfun(@plus,Signature_mean,Xapprox) % add the mean back in
 joint=1;
 
 

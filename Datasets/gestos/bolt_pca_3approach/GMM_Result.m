@@ -31,7 +31,7 @@ if printflag
     %% Plot of the GMM encoding results
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     %plot 1D
-    figure('Name','Plot of the GMM encoding results (left) and GMR regression (right) and concatenated signature (bottom)');
+    figure('Name','Plot of the GMM encoding results (left) and GMR regression (right) and generated signature (bottom)');
     for n=1:nbVar-1
       subplot(nbVar,2,(2*n-1))
       hold on
@@ -88,9 +88,9 @@ for n=1:nbVar-1
 end
 
     subplot(nbVar,2,(2*n+1):(2*n+2))
-    %figure('Name','Plot of the GMR regression concatenated');
+    %figure('Name','Plot of the GMR regression generated');
     plotGMM(GMR_Data([1,2],:), GMR_Sigma(1,1,:), [0 0 .8], 3);
-    title(['Concatenated signature  from Principal Component number ' num2str(PC_number)],'fontsize',14);
+    title(['generated signature  from Principal Component number ' num2str(PC_number)],'fontsize',14);
     grid on
     axis ([0 x_size/10 -2.5 2.5]);
 

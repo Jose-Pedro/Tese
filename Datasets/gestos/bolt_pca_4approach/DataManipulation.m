@@ -56,7 +56,7 @@ if (printflag==1 || printflag==0)
 end
 %% Since we are reading the values of 12 joints here we chooose the one to
 %  evaluate
-joint_number=3;
+joint_number=1;
 
 Data=vectorwarping(Data1(:,joint_number),Data2(:,joint_number),Data3(:,joint_number),Data4(:,joint_number),Data5(:,1),Data6(:,joint_number),0,g1,g2,g3,g4,g5,g6);
 

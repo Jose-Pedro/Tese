@@ -1,0 +1,17 @@
+\contentsline {section}{\numberline {1}Introduction}{2}{section.1}
+\contentsline {section}{\numberline {2}Algorithms}{3}{section.2}
+\contentsline {subsection}{\numberline {2.1}Principal Component Analysis:}{3}{subsection.2.1}
+\contentsline {subsection}{\numberline {2.2}Dynamic Time Warping:}{3}{subsection.2.2}
+\contentsline {subsection}{\numberline {2.3}Gaussian Mixture Model:}{3}{subsection.2.3}
+\contentsline {subsection}{\numberline {2.4}Gaussian Mixture Regression:}{3}{subsection.2.4}
+\contentsline {section}{\numberline {3}Approaches}{3}{section.3}
+\contentsline {subsection}{\numberline {3.1}First Approach:}{3}{subsection.3.1}
+\contentsline {subsection}{\numberline {3.2}Second Approach:}{4}{subsection.3.2}
+\contentsline {subsection}{\numberline {3.3}Third Approach:}{4}{subsection.3.3}
+\contentsline {subsection}{\numberline {3.4}Fourth Approach:}{5}{subsection.3.4}
+\contentsline {section}{\numberline {4}Experimental Results}{5}{section.4}
+\contentsline {subsection}{\numberline {4.1}Refults for the First Approach:}{5}{subsection.4.1}
+\contentsline {subsection}{\numberline {4.2}Refults for the Second Approach:}{5}{subsection.4.2}
+\contentsline {subsection}{\numberline {4.3}Refults for the Third Approach:}{5}{subsection.4.3}
+\contentsline {subsection}{\numberline {4.4}Refults for the Fourth Approach:}{5}{subsection.4.4}
+\contentsline {section}{\numberline {5}Conclusion and Future Work}{5}{section.5}

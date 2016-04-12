@@ -12,11 +12,17 @@ function [GMR_Data , GMR_Sigma]=GMM_Result(PC_number,Data,N_Clusters,printflag)
 % GMR_Data - Matriz with the resulting concatenation of all the regressions
 %%Data concatenated 
 Data=cat(2,[Data(1,:) ; Data(2,:)],[Data(1,:) ; Data(3,:)],[Data(1,:) ; Data(4,:)],[Data(1,:) ; Data(5,:)],[Data(1,:) ; Data(6,:)],[Data(1,:) ; Data(7,:)]);
-
-
+    figure('Name','Plot of the GMM encoding results (left) and GMR regression (right) and concatenated signature (bottom)');
+subplot(3,1,1)
+      hold on
+plot(Data(1,:),Data(2,:),'*');
 nbStates=N_Clusters; % number of clusters used by gmm
 nbVar = size(Data,1);
-
+xlabel('t','fontsize',10); ylabel('joint values','fontsize',10);
+      grid on
+      axis ([0 8 -2.5 2.5]);
+          title('Data concatenated after PCA and DTW' ,'fontsize',10);
+      
 
 %% Training of GMM by EM algorithm, initialized by k-means clustering.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -35,9 +41,8 @@ if printflag
     %% Plot of the GMM encoding results
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     %plot 1D
-    figure('Name','Plot of the GMM encoding results (left) and GMR regression (right) and concatenated signature (bottom)');
     for n=1:nbVar-1
-      subplot(nbVar,1,(2*n-1))
+      subplot(3,1,2)
       hold on
       plotGMM(Mu([1,n+1],:), Sigma([1,n+1],[1,n+1],:), [0 .8 0], 1);
       %axis([min(Data(1,:)) max(Data(1,:)) min(Data(n+1,:))-0.01 max(Data(n+1,:))+0.01]);
@@ -56,7 +61,7 @@ if printflag
     %plot 1D
     for n=1:nbVar-1
 
-      subplot(nbVar,1,2*n)
+      subplot(3,1,3)
       hold on
       plotGMM(expData([1,n+1],:), expSigma(n,n,:), [0 0 .8], 3);
       %axis([min(Data(1,:)) max(Data(1,:)) min(Data(n+1,:))-0.01 max(Data(n+1,:))+0.01]);
@@ -91,10 +96,10 @@ for n=1:nbVar-1
         GMR_Sigma=GMR_Sigma/(nbVar-1);
     end
 end
-
-    subplot(nbVar,2,(2*n+1):(2*n+2))
-    %figure('Name','Plot of the GMR regression concatenated');
-    plotGMM(GMR_Data([1,2],:), GMR_Sigma(1,1,:), [0 0 .8], 3);
-    grid on
-    axis ([0 x_size/10 -2.5 2.5]);
+% 
+%     subplot(nbVar,2,(2*n+1):(2*n+2))
+%     %figure('Name','Plot of the GMR regression concatenated');
+%     plotGMM(GMR_Data([1,2],:), GMR_Sigma(1,1,:), [0 0 .8], 3);
+%     grid on
+%     axis ([0 x_size/10 -2.5 2.5]);
 

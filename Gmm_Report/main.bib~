@@ -1,9 +1,24 @@
 @article{Calinon07,
-   title="On Learning, Representing and Generalizing a Task in a Humanoid Robot",
-  author="S. Calinon and F. Guenter and A. Billard",
-   journal="IEEE Transactions on Systems, Man and Cybernetics, Part B",
-   year="2007",
-   volume="37",
-   number="2",
-   pages="286--298"
+title="On Learning, Representing and Generalizing a Task in a Humanoid Robot",
+author="S. Calinon and F. Guenter and A. Billard",
+journal="IEEE Transactions on Systems, Man and Cybernetics, Part B",
+year="2007",
+volume="37",
+number="2",
+pages="286--298"
 }
+
+@article{Calinon08,
+title="On Learning, Representing and Generalizing a Task in a Humanoid Robot",
+author="S. Calinon and F. Guenter and A. Billard",
+journal="IEEE Transactions on Systems, Man and Cybernetics, Part B",
+year="2007",
+volume="37",
+number="2",
+pages="286--298"
+}
+
+
+
+
+

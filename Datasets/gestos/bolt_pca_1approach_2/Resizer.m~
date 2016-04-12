@@ -1,0 +1,19 @@
+function vector=Resizer(x,num,den)
+%% num/den give us a factor of resizing that is pretended for our vector x. 
+
+if num == den % ignore when the factor is equal to 1.
+    vector=x; 
+else
+
+z=interp(x,num);
+a=size(z);
+aux=a/den;
+z_aux=z;
+if(aux>12){
+while(aux>12){
+    
+z_aux=decimate(z_aux,13);
+aux=aux-13
+
+
+end
