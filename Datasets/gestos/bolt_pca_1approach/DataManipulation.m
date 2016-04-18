@@ -303,7 +303,7 @@ Signature_mean=(mu1+mu2+mu3+mu4+mu5+mu6)/6;
 Signature_w=(w1+w2+w3+w4+w5+w6)/6;
 a=GMR_Data(1:number_pc,2,:) ;
 PC_Signature=a(:,:);
-PC_Signature=PC_Signature';
+PC_Signature=PC_Signature'
 a2=GMR_Data(1:number_pc,1,:) ;
 aux=a2(:,:);
 % plot(aux(1,:),PC_Signature(:,1));
@@ -311,7 +311,7 @@ aux=a2(:,:);
 % columns from the computed principal components. To get an idea of which
 % columns to drop, we examine the ev variable
 Xapprox = PC_Signature(:,1:number_pc)* Signature_w(:,1:number_pc)';
-Xapprox = bsxfun(@plus,Signature_mean,Xapprox) % add the mean back in
+Xapprox = bsxfun(@plus,Signature_mean,Xapprox); % add the mean back in
 joint=1;
 
 

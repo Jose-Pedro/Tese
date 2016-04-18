@@ -11,15 +11,15 @@ aux=min([size(vector1,1) size(vector2,1) size(vector3,1) size(vector4,1) size(ve
 
 % Here we use the function Resizer so we resize all the vectors to the
 % smallest one
-vector1=Resizer(vector1',aux,size(vector1,1));
-vector2=Resizer(vector2',aux,size(vector2,1));
-vector3=Resizer(vector3',aux,size(vector3,1));
-vector4=Resizer(vector4',aux,size(vector4,1));
-vector5=Resizer(vector5',aux,size(vector5,1));
-vector6=Resizer(vector6',aux,size(vector6,1));
+vector1_r=Resizer(vector1',aux,size(vector1,1));
+vector2_r=Resizer(vector2',aux,size(vector2,1));
+vector3_r=Resizer(vector3',aux,size(vector3,1));
+vector4_r=Resizer(vector4',aux,size(vector4,1));
+vector5_r=Resizer(vector5',aux,size(vector5,1));
+vector6_r=Resizer(vector6',aux,size(vector6,1));
 
 % Here we calculate the mean vector.
-vector_mean=(vector1+ vector2 + vector3 + vector4 + vector5 + vector6)/6;
+vector_mean=(vector1_r+ vector2_r + vector3_r + vector4_r + vector5_r + vector6_r)/6;
 
 % We use the function created by  Pau Micó to perform dtw and retrieve the warped vectors
 % Link: http://www.mathworks.com/matlabcentral/fileexchange/16350-continuous-dynamic-time-warping

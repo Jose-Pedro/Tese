@@ -35,17 +35,17 @@ if printflag
     %% Plot of the GMM encoding results
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     %plot 1D
-    figure('Name','Plot of the GMM encoding results (left) and GMR regression (right) and concatenated signature (bottom)');
     for n=1:nbVar-1
-      subplot(nbVar,1,(2*n-1))
+      subplot(5,1,4)
       hold on
       plotGMM(Mu([1,n+1],:), Sigma([1,n+1],[1,n+1],:), [0 .8 0], 1);
       %axis([min(Data(1,:)) max(Data(1,:)) min(Data(n+1,:))-0.01 max(Data(n+1,:))+0.01]);
-      xlabel('t','fontsize',10); ylabel('joint values','fontsize',10);
+      xlabel('Time','fontsize',12); ylabel('joint values','fontsize',12);
+
       grid on
-      axis ([0 x_size/10 -2.5 2.5]);
+      axis ([0 10 -2.5 2.5]);
       if(n==1)
-          title(['GMM Results, number of clusters used -  ' num2str(N_Clusters)],'fontsize',10);
+          title(['Gaussian Mixture Model Results, number of clusters used -  ' num2str(N_Clusters)],'fontsize',10);
       end
           
     end
@@ -56,15 +56,16 @@ if printflag
     %plot 1D
     for n=1:nbVar-1
 
-      subplot(nbVar,1,2*n)
+      subplot(5,1,5)
       hold on
       plotGMM(expData([1,n+1],:), expSigma(n,n,:), [0 0 .8], 3);
       %axis([min(Data(1,:)) max(Data(1,:)) min(Data(n+1,:))-0.01 max(Data(n+1,:))+0.01]);
-      xlabel('t','fontsize',10); ylabel('joint values','fontsize',10);
+      xlabel('Time','fontsize',12); ylabel('joint values','fontsize',12);
+
       grid on
-      axis ([0 x_size/10 -2.5 2.5]);
+      axis ([0 10 -2.5 2.5]);
       if(n==1)
-             title(['Concatenated signature  from Principal Component number ' num2str(PC_number)],'fontsize',10);
+             title(['Gaussian Mixture Regression for Principal Component number ' num2str(PC_number)],'fontsize',10);
 
       end
     end

@@ -6,14 +6,5 @@ if num == den % ignore when the factor is equal to 1.
 else
 
 z=interp(x,num);
-a=size(z);
-aux=a/den;
-z_aux=z;
-if(aux>12){
-while(aux>12){
-    
-z_aux=decimate(z_aux,13);
-aux=aux-13
-
-
+vector=decimate(z,den);
 end
