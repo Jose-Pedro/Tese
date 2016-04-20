@@ -86,7 +86,7 @@ class MyClass(GeneratedClass):
                             <Input name="onStop" type="1" type_size="1" nature="3" inner="0" tooltip="Box behavior stops when a signal is received on this input." id="3" />
                             <Output name="onStopped" type="1" type_size="1" nature="1" inner="0" tooltip="Signal sent when box behavior is finished." id="4" />
                         </Box>
-                        <Box name="Tactile Head" id="2" localization="8" tooltip="Detect touch on head tactile sensor." x="466" y="219">
+                        <Box name="Tactile Head" id="2" localization="8" tooltip="Detect touch on head tactile sensor." x="435" y="77">
                             <bitmap>media/images/box/sensors/tactileHead.png</bitmap>
                             <script language="4">
                                 <content>
@@ -343,14 +343,13 @@ class MyClass(GeneratedClass):
                             </Timeline>
                             <Resource name="All motors" type="Lock" timeout="0" />
                         </Box>
-                        <Link inputowner="0" indexofinput="4" outputowner="1" indexofoutput="4" />
                         <Link inputowner="1" indexofinput="3" outputowner="2" indexofoutput="9" />
                         <Link inputowner="1" indexofinput="3" outputowner="2" indexofoutput="10" />
-                        <Link inputowner="1" indexofinput="3" outputowner="2" indexofoutput="8" />
                         <Link inputowner="3" indexofinput="2" outputowner="0" indexofoutput="2" />
                         <Link inputowner="4" indexofinput="2" outputowner="3" indexofoutput="3" />
-                        <Link inputowner="1" indexofinput="2" outputowner="4" indexofoutput="4" />
                         <Link inputowner="2" indexofinput="2" outputowner="4" indexofoutput="4" />
+                        <Link inputowner="1" indexofinput="2" outputowner="2" indexofoutput="8" />
+                        <Link inputowner="2" indexofinput="2" outputowner="1" indexofoutput="4" />
                     </Diagram>
                 </BehaviorKeyframe>
             </BehaviorLayer>

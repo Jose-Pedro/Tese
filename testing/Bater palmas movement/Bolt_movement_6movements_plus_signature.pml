@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<Package name="Reproduzir trajectoria" format_version="4">
+<Package name="Bolt_movement_6movements_plus_signature" format_version="4">
     <Manifest src="manifest.xml" />
     <BehaviorDescriptions>
         <BehaviorDescription name="behavior" src="behavior_1" xar="behavior.xar" />
@@ -15,12 +15,7 @@
         <File name="rui-bolt2015-12-7-17-6-14" src="rui-bolt2015-12-7-17-6-14" />
         <File name="rui-bolt2015-12-7-17-6-3" src="rui-bolt2015-12-7-17-6-3" />
         <File name="signature2" src="signature2.txt" />
-        <File name="medeiros-bater-palmas2015-12-7-16-56-50" src="medeiros-bater-palmas2015-12-7-16-56-50" />
-        <File name="medeiros-bater-palmas2015-12-7-16-57-16" src="medeiros-bater-palmas2015-12-7-16-57-16" />
-        <File name="medeiros-bater-palmas2015-12-7-16-58-12" src="medeiros-bater-palmas2015-12-7-16-58-12" />
-        <File name="rui-bater-palmas2015-12-7-16-54-56" src="rui-bater-palmas2015-12-7-16-54-56" />
-        <File name="rui-bater-palmas2015-12-7-16-55-10" src="rui-bater-palmas2015-12-7-16-55-10" />
-        <File name="rui-bater-palmas2015-12-7-16-55-39" src="rui-bater-palmas2015-12-7-16-55-39" />
+        <File name="signature_withoutPCA" src="signature_withoutPCA.txt" />
     </Resources>
     <Topics />
     <IgnoredPaths />

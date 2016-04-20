@@ -80,7 +80,7 @@ class MyClass(GeneratedClass):
 
 
         # completeName = os.path.abspath('/home/nao/naoqi/trajectory.txt')
-        completeName = os.path.abspath('/home/josepedro/Tese/testing/Reproduzir trajectoria/signature.txt')
+        completeName = os.path.abspath('/home/josepedro/Tese/testing/Reproduzir trajectoria/rui-bater-palmas2015-12-7-16-54-56')
 
         with open(completeName) as f:
             for line in f:  #Line is a string
