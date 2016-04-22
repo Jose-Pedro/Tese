@@ -5,9 +5,8 @@ clc;
 
 
 %% with this we decide if we what data to plot
-printflag=5;
 
-approach=1;
+
 % with this we decide if we want to print the data after resizing the warped vectors or not
 %% Since we are reading the values of 12 joints here we chooose the one to
 %  evaluate
@@ -16,17 +15,17 @@ joint_number=1;
 %% Here we choosed to analyse the Data from bolt movement (ReadData is a simple function that reads 
 % the formatted data from txt files. We have in total 6 samples from two people (3 samples each) 
 % perfoming the same movement.
-g1='medeiros-bolt2015-12-7-17-4-31';
+g1='trajectoryLateralarmraise7.txt';
 Data1=ReadData(g1);
-g2='medeiros-bolt2015-12-7-17-5-12';
+g2='trajectoryLateralarmraise8.txt';
 Data2=ReadData(g2);
-g3='medeiros-bolt2015-12-7-17-5-24';
+g3='trajectoryLateralarmraise3.txt';
 Data3=ReadData(g3);
-g4='rui-bolt2015-12-7-17-5-49';
+g4='trajectoryLateralarmraise11.txt';
 Data4=ReadData(g4);
-g5='rui-bolt2015-12-7-17-6-3';
+g5='trajectoryLateralarmraise5.txt';
 Data5=ReadData(g5);
-g6='rui-bolt2015-12-7-17-6-14';
+g6='trajectoryLateralarmraise6.txt';
 Data6=ReadData(g6);
 
 
@@ -43,7 +42,7 @@ Data6=ReadData(g6);
         [m6,n6]=size(Data6(:,1));
         t6=0:100/10^3:m6*100/10^3-100/10^3;
         global min_size
-        min_size=min([m1 m2 m3 m4 m5 m6])
+        min_size=min([m1 m2 m3 m4 m5 m6]);
         
 
 %% So we can have perception and comparison of the data we need to introduce the time constant since 
@@ -51,6 +50,7 @@ Data6=ReadData(g6);
 % generate the time vectors. For example we take the size of "Data1" and from a specific joint 
 % number into the variable m1 -- [m1,n1]=size(Data1(:,joint_number)); and use that information to 
 % build vector t1(time 1) -- t1=0:100/10^3:m1*100/10^3-100/10^3;
+printflag=3;
 if (printflag==1 || printflag==0)
     for i=1:6 % for the first 6 joints
         joint_number=i;
@@ -59,7 +59,7 @@ if (printflag==1 || printflag==0)
         % perform the movement. Then for ploting it interest us that all the time
         % axis have the same right limit so we multiply the biggest amount of
         % samples with the period of sampling P=100*10^-3 s;
-        aux1=max([m1 m2 m3 m4 m5 m6])
+        aux1=max([m1 m2 m3 m4 m5 m6]);
         aux1=aux1*100*10^-3; 
       
 
@@ -274,7 +274,7 @@ num_pc6
 %  to reach the 99% and and we use that number of pca for all other
 %  datasets in this case performance3 used 4 p.c. being the max number of
 %  p.c. used among the datasets.
-number_pc=4;
+number_pc=1;
 
 Data=zeros(7,70);
 GMR_Data=zeros(4,2,100);
@@ -283,7 +283,7 @@ for i=1:number_pc
     
     Data=pcvectorwarping(pc1(:,i),pc2(:,i),pc3(:,i),pc4(:,i),pc5(:,i),pc6(:,i),g1,g2,g3,g4,g5,g6,i,0);
 
-    [GMR_Data(i,:,:) , GMR_Sigma(i,1,1,:)]=GMM_Result(i,Data,5,1);
+    [GMR_Data(i,:,:) , GMR_Sigma(i,1,1,:)]=GMM_Result(i,Data,7,1);
 end
 
 Signature_mean=(mu1+mu2+mu3+mu4+mu5+mu6)/6;
@@ -305,7 +305,7 @@ joint=1;
 
 Vector_n=zeros(min_size,12);        
 for joint=1:12
-if joint==1     
+if joint==13     
 figure('Name','Original Datasets and final signature. Before resizing');
 h(1)=plot(Xapprox(:,joint),'^-b'); 
 title(['Original Datasets and final signature from the joint number  ' num2str(joint)],'fontsize',16)
@@ -390,8 +390,8 @@ xlabel('Time - 100ms each point. ');
 axis ([0 min_size/10 -2.5 2.5]);
 legend(h,'Signature', g1, g2, g3, g4, g5, g6);
 Vector_n(:,joint)=vectors(2,:);
-
 end
+
 
 
 

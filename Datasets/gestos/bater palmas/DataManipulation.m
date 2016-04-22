@@ -15,11 +15,11 @@ joint_number=1;
 %% Here we choosed to analyse the Data from bolt movement (ReadData is a simple function that reads 
 % the formatted data from txt files. We have in total 6 samples from two people (3 samples each) 
 % perfoming the same movement.
-g1='rui-bater-palmas2015-12-7-16-55-39';
+g1='medeiros-bater-palmas2015-12-7-16-58-12';
 Data1=ReadData(g1);
-g2='rui-bater-palmas2015-12-7-16-55-10';
+g2='medeiros-bater-palmas2015-12-7-16-57-16';
 Data2=ReadData(g2);
-g3='rui-bater-palmas2015-12-7-16-54-56';
+g3='medeiros-bater-palmas2015-12-7-16-56-50';
 Data3=ReadData(g3);
 g4='rui-bater-palmas2015-12-7-16-55-39';
 Data4=ReadData(g4);
@@ -283,7 +283,7 @@ for i=1:number_pc
     
     Data=pcvectorwarping(pc1(:,i),pc2(:,i),pc3(:,i),pc4(:,i),pc5(:,i),pc6(:,i),g1,g2,g3,g4,g5,g6,i,0);
 
-    [GMR_Data(i,:,:) , GMR_Sigma(i,1,1,:)]=GMM_Result(i,Data,5,1);
+    [GMR_Data(i,:,:) , GMR_Sigma(i,1,1,:)]=GMM_Result(i,Data,10,1);
 end
 
 Signature_mean=(mu1+mu2+mu3+mu4+mu5+mu6)/6;
@@ -390,8 +390,10 @@ xlabel('Time - 100ms each point. ');
 axis ([0 min_size/10 -2.5 2.5]);
 legend(h,'Signature', g1, g2, g3, g4, g5, g6);
 end
-end
+
 Vector_n(:,joint)=vectors(2,:);
+end
+
 
 
 
