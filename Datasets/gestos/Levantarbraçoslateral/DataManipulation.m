@@ -15,13 +15,13 @@ joint_number=1;
 %% Here we choosed to analyse the Data from bolt movement (ReadData is a simple function that reads 
 % the formatted data from txt files. We have in total 6 samples from two people (3 samples each) 
 % perfoming the same movement.
-g1='trajectoryLateralarmraise7.txt';
+g1='trajectoryLateralarmraise1.txt';
 Data1=ReadData(g1);
-g2='trajectoryLateralarmraise8.txt';
+g2='trajectoryLateralarmraise2.txt';
 Data2=ReadData(g2);
 g3='trajectoryLateralarmraise3.txt';
 Data3=ReadData(g3);
-g4='trajectoryLateralarmraise11.txt';
+g4='trajectoryLateralarmraise4.txt';
 Data4=ReadData(g4);
 g5='trajectoryLateralarmraise5.txt';
 Data5=ReadData(g5);

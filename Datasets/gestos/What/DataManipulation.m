@@ -25,7 +25,7 @@ g4='trajectorywhat4.txt';
 Data4=ReadData(g4);
 g5='trajectorywhat5.txt';
 Data5=ReadData(g5);
-g6='trajectorywhat7.txt';
+g6='trajectorywhat6.txt';
 Data6=ReadData(g6);
 
 
@@ -283,7 +283,7 @@ for i=1:number_pc
     
     Data=pcvectorwarping(pc1(:,i),pc2(:,i),pc3(:,i),pc4(:,i),pc5(:,i),pc6(:,i),g1,g2,g3,g4,g5,g6,i,0);
 
-    [GMR_Data(i,:,:) , GMR_Sigma(i,1,1,:)]=GMM_Result(i,Data,10,1);
+    [GMR_Data(i,:,:) , GMR_Sigma(i,1,1,:)]=GMM_Result(i,Data,8,1);
 end
 
 Signature_mean=(mu1+mu2+mu3+mu4+mu5+mu6)/6;

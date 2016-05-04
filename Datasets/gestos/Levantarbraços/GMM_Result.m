@@ -20,7 +20,7 @@ nbVar = size(Data,1);
 x_max=(size(Data,2)/6)*100*10^-3;
 xlabel('Time - (100ms each point)','fontsize',12); ylabel('joint values','fontsize',13);
       grid on
-      axis ([0 x_max -2.5 2.5]);
+      axis ([0 x_max -3 3]);
           title('Data concatenated after PCA and DTW');
       
 
@@ -48,7 +48,7 @@ if printflag
       %axis([min(Data(1,:)) max(Data(1,:)) min(Data(n+1,:))-0.01 max(Data(n+1,:))+0.01]);
       xlabel('Time - (100ms each point)','fontsize',12); ylabel('joint values','fontsize',12);
       grid on
-      axis ([0 x_size/10 -2.5 2.5]);
+      axis ([0 x_size/10 -3 3]);
       if(n==1)
           title(['Gaussian Mixture Model Results, number of clusters used -  ' num2str(N_Clusters)],'fontsize',10);
       end
@@ -67,7 +67,7 @@ if printflag
       %axis([min(Data(1,:)) max(Data(1,:)) min(Data(n+1,:))-0.01 max(Data(n+1,:))+0.01]);
       xlabel('Time - (100ms each point)','fontsize',12); ylabel('joint values','fontsize',12);
       grid on
-      axis ([0 x_size/10 -2.5 2.5]);
+      axis ([0 x_size/10 -3 3]);
       if(n==1)
              title(['Gaussian Mixture Regression for Principal Component number ' num2str(PC_number)],'fontsize',10);
 

@@ -15,17 +15,17 @@ joint_number=1;
 %% Here we choosed to analyse the Data from bolt movement (ReadData is a simple function that reads 
 % the formatted data from txt files. We have in total 6 samples from two people (3 samples each) 
 % perfoming the same movement.
-g1='trajectorybyebye16.txt';
+g1='trajectorybyebye6.txt';
 Data1=ReadData(g1);
-g2='trajectorybyebye15.txt';
+g2='trajectorybyebye5.txt';
 Data2=ReadData(g2);
-g3='trajectorybyebye14.txt';
+g3='trajectorybyebye4.txt';
 Data3=ReadData(g3);
-g4='trajectorybyebye13.txt';
+g4='trajectorybyebye3.txt';
 Data4=ReadData(g4);
-g5='trajectorybyebye12.txt';
+g5='trajectorybyebye2.txt';
 Data5=ReadData(g5);
-g6='trajectorybyebye17.txt';
+g6='trajectorybyebye1.txt';
 Data6=ReadData(g6);
 
 
@@ -274,7 +274,7 @@ num_pc6
 %  to reach the 99% and and we use that number of pca for all other
 %  datasets in this case performance3 used 4 p.c. being the max number of
 %  p.c. used among the datasets.
-number_pc=4;
+number_pc=3;
 
 Data=zeros(7,70);
 GMR_Data=zeros(4,2,100);
@@ -283,7 +283,7 @@ for i=1:number_pc
     
     Data=pcvectorwarping(pc1(:,i),pc2(:,i),pc3(:,i),pc4(:,i),pc5(:,i),pc6(:,i),g1,g2,g3,g4,g5,g6,i,0);
 
-    [GMR_Data(i,:,:) , GMR_Sigma(i,1,1,:)]=GMM_Result(i,Data,10,1);
+    [GMR_Data(i,:,:) , GMR_Sigma(i,1,1,:)]=GMM_Result(i,Data,15,1);
 end
 
 Signature_mean=(mu1+mu2+mu3+mu4+mu5+mu6)/6;

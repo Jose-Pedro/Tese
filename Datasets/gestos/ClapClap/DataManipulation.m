@@ -17,15 +17,15 @@ joint_number=1;
 % perfoming the same movement.
 g1='trajectoryclap1.txt';
 Data1=ReadData(g1);
-g2='trajectoryclap4.txt';
+g2='trajectoryclap2.txt';
 Data2=ReadData(g2);
-g3='trajectoryclap5.txt';
+g3='trajectoryclap3.txt';
 Data3=ReadData(g3);
-g4='trajectoryclap7.txt';
+g4='trajectoryclap4.txt';
 Data4=ReadData(g4);
-g5='trajectoryclap8.txt';
+g5='trajectoryclap5.txt';
 Data5=ReadData(g5);
-g6='trajectoryclap9.txt';
+g6='trajectoryclap6.txt';
 Data6=ReadData(g6);
 
 
@@ -274,7 +274,7 @@ num_pc6
 %  to reach the 99% and and we use that number of pca for all other
 %  datasets in this case performance3 used 4 p.c. being the max number of
 %  p.c. used among the datasets.
-number_pc=4;
+number_pc=3;
 
 Data=zeros(7,70);
 GMR_Data=zeros(4,2,100);
@@ -366,7 +366,7 @@ end
         [m,n]=size(vector1);% Here we define the temporal constraint
         T=n*100/10^3;
         t=0:100/10^3:T-100/10^3;
-  a=2;   
+  a=1;   
 if a==1
 figure('Name','Original Datasets and final signature. After resizing');
 h(1)=plot(t,vectors(2,:),'s-b'); 

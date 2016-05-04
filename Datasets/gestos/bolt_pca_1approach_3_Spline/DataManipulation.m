@@ -367,7 +367,7 @@ end
         T=n*100/10^3;
         t=0:100/10^3:T-100/10^3;
      
-
+if(joint==1 ||joint==3 || joint==4 || joint==7 || joint==8)
 figure('Name','Original Datasets and final signature. After resizing');
 h(1)=plot(t,vectors(2,:),'s-b'); 
 title(['Original Datasets and final signature (resized) from the joint number  ' num2str(joint)],'fontsize',16)
@@ -390,6 +390,7 @@ xlabel('Time - 100ms each point. ');
 axis ([0 min_size/10 -2.5 2.5]);
 legend(h,'Signature', g1, g2, g3, g4, g5, g6);
 Vector_n(:,joint)=vectors(2,:);
+end
 
 end
 

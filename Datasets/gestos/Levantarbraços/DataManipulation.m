@@ -325,7 +325,7 @@ hold on;
 grid on
 ylabel('joiint values');
 xlabel('Time - 1ms each point. ');
-axis ([0 100 -2.5 2.5]);
+axis ([0 100 -3 3]);
 
 legend(h,'Signature', g1, g2, g3, g4, g5, g6);
 end
@@ -387,7 +387,7 @@ hold on;
 grid on
 ylabel('joiint values');
 xlabel('Time - 100ms each point. ');
-axis ([0 min_size/10 -2.5 2.5]);
+axis ([0 min_size/10 -3 3]);
 legend(h,'Signature', g1, g2, g3, g4, g5, g6);
 Vector_n(:,joint)=vectors(2,:);
 end
